@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:untitled/screen/home/components/body.dart';
-import 'package:untitled/services/auth.dart';
+import 'package:untitled/services/provider/auth_notifier.dart';
 import 'package:untitled/shared/constants.dart';
 
 class Home extends StatelessWidget {
+
   const Home({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
-    final AuthService _authService = AuthService();
+    // final AuthService _authService = AuthService();
+
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(
+
+      ),
       body: Body(),
     );
   }
 
   AppBar buildAppBar() {
+    final AuthNotifier _authService = AuthNotifier();
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
       leading: IconButton(
         icon: SvgPicture.asset('lib/assets/icons/back.svg'),
-        onPressed: () {},
+        onPressed: () {
+          _authService.signOut();
+
+
+        },
       ),
       actions: <Widget>[
         IconButton(
