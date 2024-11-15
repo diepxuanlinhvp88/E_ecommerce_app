@@ -14,7 +14,10 @@ color: Colors.pink, width: 2.0
 )
 );
 
+
 const kTextColor = Color(0xFF232323);
 const kTextLightColor = Color(0xFFACACAC);
+
+const kColumnPaddingDF = 8.0;
 
 const kDefaultPaddin = 20.0;
