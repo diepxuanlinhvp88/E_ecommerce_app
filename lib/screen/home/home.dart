@@ -1,23 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:untitled/screen/home/components/body.dart';
+
 import 'package:untitled/services/provider/auth_notifier.dart';
 import 'package:untitled/shared/constants.dart';
 
+import 'dart:convert';
+
 class Home extends StatelessWidget {
+  Home({super.key});
 
-  const Home({super.key});
-
-
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     // final AuthService _authService = AuthService();
 
     return Scaffold(
-      appBar: buildAppBar(
-
-      ),
+      appBar: buildAppBar(),
       body: Body(),
     );
   }
@@ -31,15 +34,15 @@ class Home extends StatelessWidget {
         icon: SvgPicture.asset('lib/assets/icons/back.svg'),
         onPressed: () {
           _authService.signOut();
-
-
         },
       ),
       actions: <Widget>[
         IconButton(
-          onPressed: () {},
-          icon: SvgPicture.asset('lib/assets/icons/cart.svg',
-              color: kTextColor),
+          onPressed: () async {
+
+          },
+          icon:
+              SvgPicture.asset('lib/assets/icons/cart.svg', color: kTextColor),
         ),
         IconButton(
           onPressed: () {},
@@ -48,7 +51,9 @@ class Home extends StatelessWidget {
             color: kTextColor,
           ),
         ),
-        SizedBox(height: kDefaultPaddin /2,)
+        SizedBox(
+          height: kDefaultPaddin / 2,
+        )
       ],
     );
   }
