@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:untitled/screen/home/components/body.dart';
-import 'package:untitled/services/auth.dart';
+import 'package:untitled/services/auth_service.dart';
 import 'package:untitled/shared/constants.dart';
 
 class Home extends StatelessWidget {

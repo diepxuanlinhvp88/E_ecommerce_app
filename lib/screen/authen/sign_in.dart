@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/screen/authen/authenticate.dart';
-import 'package:untitled/services/auth.dart';
+import 'package:untitled/services/auth_service.dart';
 import 'package:untitled/shared/loading.dart';
 
 import '../../shared/constants.dart';
