@@ -20,7 +20,7 @@ class _ForgotpassState extends State<Forgotpass> {
     // Kiểm tra nếu email chưa nhập
     if (email.isEmpty) {
       setState(() {
-        errorText = 'Email is required'; // Cập nhật lỗi nếu email trống
+        errorText = 'Email is required';
       });
       return;
     }
@@ -28,13 +28,13 @@ class _ForgotpassState extends State<Forgotpass> {
     // Kiểm tra nếu email không hợp lệ
     if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$').hasMatch(email)) {
       setState(() {
-        errorText = 'Invalid email address'; // Cập nhật lỗi nếu email không hợp lệ
+        errorText = 'Invalid email address';
       });
       return;
     }
 
     setState(() {
-      errorText = null; // Đặt lại lỗi nếu email hợp lệ
+      errorText = null;
     });
 
     // Lấy AuthNotifier từ context

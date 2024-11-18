@@ -14,9 +14,9 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: product.color,
+      backgroundColor: Color(0xFF8C68EE),
       appBar: AppBar(
-        backgroundColor: product.color,
+        backgroundColor: Color(0xFF8C68EE),
         elevation: 0,
         leading: IconButton(
           icon: SvgPicture.asset(
