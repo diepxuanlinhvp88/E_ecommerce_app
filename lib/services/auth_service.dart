@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:untitled/data/models/user_model.dart';
 
 class AuthService extends ChangeNotifier {
   // Singleton pattern
@@ -13,6 +14,10 @@ class AuthService extends ChangeNotifier {
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   get success => null;
+
+  bool get isLoading => false;
+
+  get error => "";
 
   /// Check if user is logged in
   bool isLoggedIn() {
@@ -57,7 +62,7 @@ class AuthService extends ChangeNotifier {
   /// Sign up with email and password
   Future<UserCredential> signUp({
     required String email,
-    required String password,
+    required String password, required UserModel userModel,
   }) async {
     try {
       final credential = await _auth.createUserWithEmailAndPassword(
