@@ -1,37 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:untitled/data/models/selection_popup_model.dart';
+import 'package:untitled/widgets/custom_drop_down.dart';
 import '../../core/app_export.dart';
+import '../../widgets/custom_elevated_button.dart';
+import '../../widgets/custom_text_form_field.dart';
+import 'models/sign_up_model.dart';
+import 'package:untitled/data/models/user_model.dart';
+
+// import '../models/user_model.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
-
-  void toggleView() {}
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  String email = '';
-  String password = '';
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+
+  String _selectedNationality = 'Vietnam';
+  String _selectedGender = 'Male';
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _acceptedTerms = false;
   bool _acceptedMarketing = false;
 
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+    if (!_acceptedTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please accept the Terms & Conditions')),
+      );
+      return;
+    }
+
+    final authProvider = Provider.of<AuthService>(context, listen: false);
+
+    final userModel = UserModel(
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      email: _emailController.text,
+      nationality: _selectedNationality,
+      gender: _selectedGender,
+      acceptedTerms: _acceptedTerms,
+      acceptedMarketing: _acceptedMarketing,
+    );
+
+    try {
+      final bool success = (await authProvider.signUp(
+        email: _emailController.text,
+        password: _passwordController.text,
+        userModel: userModel,
+      )) as bool;
+
+      if (success && mounted) {
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please accept the Terms & Conditions')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final authNotifier = Provider.of<AuthService>(context);
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80.0),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(12),
             bottomRight: Radius.circular(12),
           ),
@@ -40,287 +98,337 @@ class _SignUpScreenState extends State<SignUpScreen> {
             elevation: 0,
             centerTitle: true,
             toolbarHeight: 110.0,
-            title: Text(
-              'Register',
-              style: theme.textTheme.titleMedium!.copyWith(
-                color: appTheme.black900,
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            title: Column(
               children: [
-                SizedBox(height: 4.h * 3),
                 Text(
-                  'PERSONAL INFORMATION',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  'Sign Up',
+                  style: theme.textTheme.titleMedium!.copyWith(
+                    color: appTheme.black900,
                   ),
                 ),
+                SizedBox(height: 10.h),
                 Text(
-                  '*Please use English character only',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.grey,
-                  ),
-                ),
-                SizedBox(height: 4.h * 2),
-
-                // Nationality and Sex Row
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Nationality*',
-                          border: OutlineInputBorder(),
-                        ),
-                        value: 'Vietnam',
-                        items: ['Vietnam', 'England', 'America']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: TextStyle(color: Color(0xFFFA993A)),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {},
-                      ),
-                    ),
-                    SizedBox(width: 4.h * 2),
-                    Expanded(
-                      child: DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Sex*',
-                          border: OutlineInputBorder(),
-                        ),
-                        value: 'Male',
-                        items: ['Male', 'Female'].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: TextStyle(color: Color(0xFFFA993A)),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {},
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.h * 2),
-
-                // Name Row
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'First name*',
-                          border: OutlineInputBorder(),
-                        ),
-                        style: TextStyle(
-                          color: Color(0xFFFA993A),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 4.h * 2),
-                    Expanded(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Last name*',
-                          border: OutlineInputBorder(),
-                        ),
-                        style: TextStyle(
-                          color: Color(0xFFFA993A),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.h * 2),
-
-                // Email
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'E-mail*',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  style: TextStyle(
-                    color: Color(0xFFFA993A),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      email = value;
-                    });
-                  },
-                ),
-                SizedBox(height: 16),
-
-                // Password
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password*',
-                    border: OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Color(0xFFFA993A),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                  ),
-                  obscureText: _obscurePassword,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your password";
-                    } else if (value.length < 6) {
-                      return "Please enter 6 chars";
-                    }
-                    return null;
-                  },
-                  style: TextStyle(
-                    color: Color(0xFFFA993A),
-                  ),
-                ),
-                SizedBox(height: 4.h * 2),
-
-                // Confirm Password
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password*',
-                    border: OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureConfirmPassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Color(0xFFFA993A),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureConfirmPassword =
-                          !_obscureConfirmPassword;
-                        });
-                      },
-                    ),
-                  ),
-                  obscureText: _obscureConfirmPassword,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please confirm your password";
-                    } else if (value.length < 6) {
-                      return "Please enter 6 chars";
-                    }
-                    if (value != _passwordController.text) {
-                      print(_passwordController.text);
-                      print("${value}sff");
-                      return "Password do not match";
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      password = value;
-                    });
-                  },
-                  style: TextStyle(
-                    color: Color(0xFFFA993A),
-                  ),
-                ),
-                SizedBox(height: 16),
-
-                // Checkboxes
-                CheckboxListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: RichText(
-                    text: TextSpan(
-                      style: TextStyle(color: Colors.black),
-                      children: [
-                        TextSpan(text: 'I hereby read and accepted the '),
-                        TextSpan(
-                          text: 'Terms & Conditions',
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                        TextSpan(text: ' of GlobalCart App'),
-                      ],
-                    ),
-                  ),
-                  value: _acceptedTerms,
-                  controlAffinity: ListTileControlAffinity.leading,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _acceptedTerms = value ?? false;
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    'I agree to receive information about promotions and marketing e-mails from GlobalCart and partners',
-                  ),
-                  value: _acceptedMarketing,
-                  controlAffinity: ListTileControlAffinity.leading,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _acceptedMarketing = value ?? false;
-                    });
-                  },
-                ),
-                SizedBox(height: 16),
-
-
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFFA993A),
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    onPressed: () async {
-                      if (!_acceptedTerms || !_acceptedMarketing) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please accept Terms of Use'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-
-                      if (_formKey.currentState!.validate()) {
-                        dynamic result = await authNotifier.signUp(email: email,password: password);
-
-                      }
-                    },
-                    child: Text('Submit', style: TextStyle(fontSize: 16)),
-                  ),
-                ),
+                    'Join us for a better shopping experience!',
+                    style: theme.textTheme.bodyMedium
+                )
               ],
             ),
           ),
         ),
+      ),
+      body: Consumer<AuthService>(
+        builder: (context, authProvider, child) {
+          if (authProvider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'PERSONAL INFORMATION',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 18.h),
+                    Text(
+                      '*Please use English character only',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    SizedBox(height: 18.h),
+
+                    // Nationality and Gender dropdowns
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Nationality*",
+                                  style: theme.textTheme.bodyMedium,
+                                ),
+                                SizedBox(height: 2.h),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.h),
+                                  child: CustomDropDown(
+                                    icon: Container(
+                                      margin: EdgeInsets.only(left: 16.0),
+                                      child: Icon(Icons.keyboard_arrow_down),
+                                    ),
+                                    iconSize: 14.h,
+                                    hintText: "Vietnam",
+                                    items: SignUpModel().nationalityList,
+                                  ),
+                                )
+                              ],
+                            )
+                        ),
+                        Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Gender*",
+                                  style: theme.textTheme.bodyMedium,
+                                ),
+                                SizedBox(height: 2.h),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.h),
+                                  child: CustomDropDown(
+                                    icon: Container(
+                                      margin: EdgeInsets.only(left: 16.0),
+                                      child: Icon(Icons.keyboard_arrow_down),
+                                    ),
+                                    iconSize: 14.h,
+                                    hintText: "Male",
+                                    items: SignUpModel().genderList,
+                                  ),
+                                )
+                              ],
+                            )
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 14.h),
+
+                    // First and Last Name
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "First name*",
+                                  style: theme.textTheme.bodyMedium,
+                                ),
+                                SizedBox(height: 2.h),
+                                Padding(
+                                    padding: EdgeInsets.only(right: 8.h),
+                                    child: CustomTextFormField(
+                                      hintText: "John",
+                                      contentPadding: EdgeInsets.all(10.h),
+                                      controller: _firstNameController,
+                                      validator: (value) {
+                                        if (value?.isEmpty ?? true) {
+                                          return 'Please enter your first name';
+                                        }
+                                        return null;
+                                      },
+                                    )
+                                )
+                              ],
+                            )
+                        ),
+                        SizedBox(width: 14.h),
+                        Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "First name*",
+                                  style: theme.textTheme.bodyMedium,
+                                ),
+                                SizedBox(height: 2.h),
+                                Padding(
+                                    padding: EdgeInsets.only(right: 8.h),
+                                    child: CustomTextFormField(
+                                      hintText: "Doe",
+                                      contentPadding: EdgeInsets.all(10.h),
+                                      controller: _lastNameController,
+                                      validator: (value) {
+                                        if (value?.isEmpty ?? true) {
+                                          return 'Please enter your first name';
+                                        }
+                                        return null;
+                                      },
+                                    )
+                                )
+                              ],
+                            )
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 14.h),
+                    SizedBox(
+                      width: double.maxFinite,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'E-mail*',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          SizedBox(height: 2.h),
+                          CustomTextFormField(
+                            controller: _emailController,
+                            hintText: "Please enter your email",
+                            textInputType: TextInputType.emailAddress,
+                            contentPadding: EdgeInsets.all(10.h),
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Please enter your email';
+                              }
+                              if (!value!.contains('@')) {
+                                return 'Please enter a valid email';
+                              }
+                              return null;
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 14.h),
+
+                    SizedBox(
+                      width: double.maxFinite,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Password*',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          SizedBox(height: 2.h),
+                          CustomTextFormField(
+                            controller: _passwordController,
+                            hintText: "Please enter your password",
+                            suffix: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
+                            suffixConstraints: BoxConstraints(maxHeight: 40.h),
+                            contentPadding: EdgeInsets.all(10.h),
+                            obscureText: _obscurePassword,
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Please enter a password';
+                              }
+                              if (value!.length < 6) {
+                                return 'Password must be at least 6 characters';
+                              }
+                              return null;
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 14.h),
+
+                    SizedBox(
+                      width: double.maxFinite,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Password*',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          SizedBox(height: 2.h),
+                          CustomTextFormField(
+                            controller: _confirmPasswordController,
+                            hintText: "Please re-enter your password",
+                            suffix: IconButton(
+                              icon: Icon(
+                                _obscureConfirmPassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureConfirmPassword = !_obscureConfirmPassword;
+                                });
+                              },
+                            ),
+                            suffixConstraints: BoxConstraints(maxHeight: 40.h),
+                            contentPadding: EdgeInsets.all(10.h),
+                            obscureText: _obscureConfirmPassword,
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Please confirm your password';
+                              }
+                              if (value != _passwordController.text) {
+                                return 'Passwords do not match';
+                              }
+                              return null;
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 14.h),
+
+                    // Checkboxes
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        'I hereby read and accepted the Terms & Conditions of GlobalCard App',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      value: _acceptedTerms,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _acceptedTerms = value ?? false;
+                        });
+                      },
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        'I agree to receive information about promotions and marketing e-mails from GlobalCart and partners',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      value: _acceptedMarketing,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _acceptedMarketing = value ?? false;
+                        });
+                      },
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
+                    SizedBox(height: 16),
+                    SizedBox(
+                      child: CustomElevatedButton(
+                        onPressed: _submit,
+                        text: 'Submit',
+                        height: 50.h,
+                        buttonStyle: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
