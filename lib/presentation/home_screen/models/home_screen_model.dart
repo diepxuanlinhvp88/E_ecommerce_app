@@ -38,7 +38,29 @@ class HomeScreenModel {
   ];
 
   List<CategoryListItemModel> categoryList = [
-    CategoryListItemModel(),
-    CategoryListItemModel(),
+    CategoryListItemModel(
+      name: "Computer & Accessories",
+      imageUrl: "lib/assets/icons/computer_and_accessories.svg"
+    ),
+    CategoryListItemModel(
+      name: "Home & Kitchen",
+      imageUrl: "lib/assets/icons/home_and_kitchen.svg"
+    ),
+    CategoryListItemModel(
+        name: "Fashion & Apparel",
+        imageUrl: "lib/assets/icons/fashion_and_apparel.svg"
+    ),
+    CategoryListItemModel(
+        name: "Groceries",
+        imageUrl: "lib/assets/icons/groceries.svg"
+    ),
+    CategoryListItemModel(
+        name: "Toys",
+        imageUrl: "lib/assets/icons/toys.svg"
+    ),
+    CategoryListItemModel(
+        name: "Books & Media",
+        imageUrl: "lib/assets/icons/books_and_media.svg"
+    ),
   ];
 }

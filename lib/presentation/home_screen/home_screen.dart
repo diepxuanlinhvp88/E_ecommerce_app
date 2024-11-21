@@ -22,7 +22,7 @@ class HomeScreen extends StatefulWidget {
   static Widget builder(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => HomeScreenProvider(),
-      child: HomeScreen(),
+      child: const HomeScreen(),
     );
   }
 }
@@ -36,12 +36,11 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(80.0),
           child: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.transparent.withOpacity(0),
             elevation: 0,
             centerTitle: true,
             toolbarHeight: 110.0,
@@ -225,25 +224,27 @@ class HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCategorySliderSection(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 32),
+      padding: EdgeInsets.only(left: 4.h),
       child: Consumer<HomeScreenProvider>(
         builder: (context, provider, _) {
-          final itemList = provider.homeScreenModel.categoryList;
+          final categoryList = provider.homeScreenModel.categoryList;
 
           return CarouselSlider.builder(
             options: CarouselOptions(
-              height: 138,
+              height: 110.h, // Responsive height
               initialPage: 0,
               autoPlay: true,
-              viewportFraction: 1.0,
+              viewportFraction: 0.2,
               scrollDirection: Axis.horizontal,
               onPageChanged: (index, _) =>
                   provider.changeSliderIndex(index),
             ),
-            itemCount: itemList.length,
+            itemCount: categoryList.length,
             itemBuilder: (context, index, _) {
               return CategoryListItemWidget(
-                itemList[index],
+                categoryListItemObj: categoryList[index],
+                onTap: () {
+                },
               );
             },
           );
