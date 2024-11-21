@@ -149,7 +149,7 @@ class WelcomeOnboardingScreen extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {
-                                  Navigator.pushNamed(context, AppRoutes.welcomeOnboardingScreen);
+                                  Navigator.pushNamed(context, AppRoutes.homeScreen);
                                 },
                               ),
                             ),

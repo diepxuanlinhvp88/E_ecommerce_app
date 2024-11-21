@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isLoggedIn) {
         // Navigator.pushNamed(context, AppRoutes.homeScreen);
         await FirebaseAuth.instance.signOut();
-        Navigator.pushNamed(context, AppRoutes.welcomeOnboardingScreen);
+        Navigator.pushNamed(context, AppRoutes.homeScreen);
       } else {
         Navigator.pushNamed(context, AppRoutes.welcomeOnboardingScreen);
       }

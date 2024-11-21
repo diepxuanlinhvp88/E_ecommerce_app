@@ -43,8 +43,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _submit() async {
+
     if (!_formKey.currentState!.validate()) return;
-    if (!_acceptedTerms) {
+    if (!_acceptedTerms || !_acceptedMarketing) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please accept the Terms & Conditions')),
       );
@@ -76,9 +77,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please accept the Terms & Conditions')),
       );
     }
   }

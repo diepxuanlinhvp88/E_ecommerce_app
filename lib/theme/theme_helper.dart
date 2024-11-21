@@ -149,4 +149,5 @@ class LightCodeColors {
   Color get orangeA200 => const Color(0XFFFA993B);
   Color get red300 => const Color(0XFFB77855);
   Color get red600 => const Color(0XFFDA4531);
+  Color get whiteA700 => const Color(0XFFFFFFFF);
 }
