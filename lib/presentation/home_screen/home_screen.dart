@@ -2,9 +2,7 @@ import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:untitled/model/Product.dart';
 import 'package:untitled/presentation/home_screen/models/banner_list_item_model.dart';
-import 'package:untitled/presentation/home_screen/models/category_list_item_model.dart';
 import '../../core/app_export.dart';
 import '../../widgets/custom_text_form_field.dart';
 import 'widgets/banner_list_item_widget.dart';
@@ -12,7 +10,6 @@ import 'widgets/product_slider_list_item_widget.dart';
 import 'widgets/category_list_item_widget.dart';
 import 'package:untitled/widgets/product_card.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
-import 'models/home_screen_model.dart';
 import 'provider/home_screen_provider.dart';
 
 
@@ -38,9 +35,28 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
+    return Scaffold(
+        backgroundColor: Colors.white,
+        extendBodyBehindAppBar: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(80.0),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            toolbarHeight: 110.0,
+            flexibleSpace: ClipRRect(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(12.h),
+                bottomRight: Radius.circular(12.h),
+              ),
+              child: Container(
+                color: appTheme.deepPurpleA200,
+              ),
+            ),
+            title: _buildSearchSection(context),
+          ),
+        ),
         body: SizedBox(
           width: double.maxFinite,
           child: SingleChildScrollView(
@@ -49,13 +65,12 @@ class HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildSearchSection(context),
-                  SizedBox(height: 26.h),
+                  SizedBox(height: 145.h),
                   _buildBannerSection(context),
                   SizedBox(height: 16.h),
                   Container(
                     width: double.maxFinite,
-                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                    padding: EdgeInsets.only(top: 16.h, bottom: 36.h),
                     decoration: BoxDecoration(
                       color: appTheme.deepPurpleA200,
                     ),
@@ -63,6 +78,7 @@ class HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildTrendingSection(context),
+                        SizedBox(height: 16.h),
                         _buildSaleSection(context),
                       ],
                     ),
@@ -74,6 +90,7 @@ class HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.only(left: 16.h),
                     child: Text(
                       "Recommend For You".toUpperCase(),
+                      style: CustomTextStyles.labelLargePrimary.copyWith(fontSize: 14.h),
                     ),
                   ),
                   SizedBox(height: 16.h),
@@ -92,62 +109,20 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           )
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildSearchSection(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      decoration: BoxDecoration(
-        color: appTheme.gray50,
-        borderRadius: BorderRadius.circular(12.h),
-        boxShadow: [
-          BoxShadow(
-            color: appTheme.black900.withOpacity(0.1),
-            spreadRadius: 2.h,
-            blurRadius: 2.h,
-            offset: Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: double.maxFinite,
-            padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 16.h),
-            decoration: BoxDecoration(
-              color: appTheme.deepPurpleA200,
-              borderRadius: BorderRadius.circular(12.h),
-              boxShadow: [
-                BoxShadow(
-                  color: appTheme.black900.withOpacity(0.1),
-                  spreadRadius: 2.h,
-                  blurRadius: 2.h,
-                  offset: Offset(0, 10),
-                ),
-              ],
-            ),
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Add inner children if needed
-              ],
-            ),
-          ),
-          SizedBox(height: 40.h),
-          Selector<HomeScreenProvider, TextEditingController?>(
-            selector: (context, provider) => provider.searchController,
-            builder: (context, searchController, child) {
-              return CustomTextFormField(
-                hintText: "Search",
-                contentPadding: EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
-                controller: searchController,
-              );
-            },
-          ),
-        ],
+    return Expanded(
+      child: Selector<HomeScreenProvider, TextEditingController?>(
+        selector: (context, provider) => provider.searchController,
+        builder: (context, searchController, child) {
+          return CustomTextFormField(
+            hintText: "Search",
+            contentPadding: EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
+            controller: searchController,
+          );
+        },
       ),
     );
   }
@@ -187,14 +162,14 @@ class HomeScreenState extends State<HomeScreen> {
         children: [
           Text(
             "trending".toUpperCase(),
-            style: theme.textTheme.titleSmall,
+            style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),
           ),
           SizedBox(height: 6.h),
           Container(
             width: double.maxFinite,
             child: Consumer<HomeScreenProvider>(
               builder: (context, provider, child) {
-                final items = provider.homeScreenModel.tredingProductList;
+                final items = provider.homeScreenModel.trendingProductList;
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Wrap(
@@ -222,7 +197,7 @@ class HomeScreenState extends State<HomeScreen> {
         children: [
           Text(
             "flash sale".toUpperCase(),
-            style: theme.textTheme.titleSmall,
+            style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),
           ),
           SizedBox(height: 6.h),
           Container(
@@ -281,17 +256,10 @@ class HomeScreenState extends State<HomeScreen> {
     return Consumer<HomeScreenProvider>(
       builder: (context, provider, _) {
         final recommendedProducts = provider.homeScreenModel.recommendedProductList;
-
-        if (recommendedProducts.isEmpty) {
-          return const Center(
-            child: Text('Không có sản phẩm được đề xuất'),
-          );
-        }
-
         return ResponsiveGridListBuilder(
-          minItemWidth: 150, // Thêm kích thước tối thiểu có ý nghĩa hơn
+          minItemWidth: 150,
           minItemsPerRow: 2,
-          maxItemsPerRow: 4, // Cho phép nhiều hơn 2 cột trên các màn hình lớn
+          maxItemsPerRow: 4,
           horizontalGridSpacing: 10,
           verticalGridSpacing: 10,
           builder: (BuildContext context, List<Widget> productWidgets) => ListView(
@@ -301,8 +269,12 @@ class HomeScreenState extends State<HomeScreen> {
             children: productWidgets,
           ),
           gridItems: recommendedProducts.map((product) {
-            // Sử dụng product thay vì lấy category từ index
-            return ProductCard(product);
+            return GestureDetector(
+              onTap: () {
+                // Navigator.pushNamed(context, AppRoutes.productDetailScreen);
+              },
+              child: ProductCard(product),
+            );
           }).toList(),
         );
       },

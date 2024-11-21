@@ -10,7 +10,7 @@ class HomeScreenModel {
     BannerListItemModel(image: "lib/assets/images/banner2.png"),
   ];
 
-  List<Product> tredingProductList = [
+  List<Product> trendingProductList = [
     products[0],
     products[0],
     products[0],
