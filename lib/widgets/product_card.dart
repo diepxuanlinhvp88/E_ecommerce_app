@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:untitled/core/app_export.dart';
 import 'package:untitled/model/Product.dart';
+import 'custom_rating_bar.dart';
 
 class ProductCard extends StatelessWidget {
   ProductCard(this.product, {super.key});
@@ -97,6 +98,7 @@ class ProductCard extends StatelessWidget {
             imagePath: product.img_link,
             height: 158.h,
             width: double.maxFinite,
+            fit: BoxFit.contain,
           ),
           SizedBox(height: 4.h),
           Align(
@@ -106,7 +108,7 @@ class ProductCard extends StatelessWidget {
               child: Text(
                 product.product_name,
                 maxLines: 2,
-                style: theme.textTheme.labelMedium,
+                style: theme.textTheme.bodyMedium,
               ),
             ),
           ),
@@ -118,17 +120,20 @@ class ProductCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${product.discounted_price}',
-                  style: CustomTextStyles.labelLargePrimary,
+                  '\$${product.actual_price.toInt()}',
+                  style: CustomTextStyles.labelLargePrimary.copyWith(fontSize: 18),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: EdgeInsets.only(left: 2.h),
                       child: Text(
-                        '${product.discounted_price}',
+                        '\$${product.discounted_price.toInt()}',
                         style: CustomTextStyles.labelLargePrimary.copyWith(
                           decoration: TextDecoration.lineThrough,
+                          decorationColor: appTheme.blueGray100,
+                          color: appTheme.blueGray100,
+                          fontSize: 12
                         ),
                       ),
                     ),
@@ -136,14 +141,20 @@ class ProductCard extends StatelessWidget {
                 const Spacer(),
                 Text(
                   '${product.rating}',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: appTheme.orangeA200
+                  ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(left: 2.h),
-                //   child: CustomRatingBar(),
-                // ),
-                Text(
-                  '${product.rating_count}',
-                )
+                Padding(
+                  padding: EdgeInsets.only(left: 2.h),
+                  child: CustomRatingBar(
+                    ignoreGestures: true,
+                    initialRating: 4.2,
+                    color: appTheme.orangeA200,
+
+                  )
+                ),
               ],
             ),
           )

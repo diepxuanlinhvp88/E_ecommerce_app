@@ -72,6 +72,7 @@ class Assets {
   static const String widgetsCustomDropDown = 'lib/widgets/custom_drop_down.dart';
   static const String widgetsCustomElevatedButton = 'lib/widgets/custom_elevated_button.dart';
   static const String widgetsCustomImageView = 'lib/widgets/custom_image_view.dart';
+  static const String widgetsCustomRatingBar = 'lib/widgets/custom_rating_bar.dart';
   static const String widgetsCustomTextFormField = 'lib/widgets/custom_text_form_field.dart';
   static const String widgetsCustomTextStyle = 'lib/widgets/custom_text_style.dart';
   static const String widgetsProductCard = 'lib/widgets/product_card.dart';

@@ -7,14 +7,12 @@ class CategoryListItemModel {
     this.homekitchen,
     this.fashionapparel,
     this.groceries,
-    this.toys,
-    this.id}) {
+    this.toys}) {
     computer = computer ?? "Computer & Accessories";
     homekitchen = homekitchen ?? "Home & Kitchen";
     fashionapparel = fashionapparel ?? " Fashion & Apparel";
     groceries = groceries ?? "Groceries";
     toys = toys ?? "Toys";
-    id = id ?? "";
   }
 
   String? computer;
@@ -22,5 +20,4 @@ class CategoryListItemModel {
   String? fashionapparel;
   String? groceries;
   String? toys;
-  String? id;
 }

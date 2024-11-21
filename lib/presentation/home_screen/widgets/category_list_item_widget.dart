@@ -39,7 +39,7 @@ class CategoryListItemWidget extends StatelessWidget {
     required double width,
   }) {
     return SizedBox(
-      width: width,
+      width: 60.h,
       child: Column(
         children: [
           Container(
@@ -64,11 +64,12 @@ class CategoryListItemWidget extends StatelessWidget {
           Text(
             label,
             maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.visible,
             textAlign: TextAlign.center,
-            style: theme.textTheme.labelSmall!.copyWith(
-              height: 1.25,
-            ),
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontSize: 10.h,
+              fontWeight: FontWeight.w500,
+            )
           ),
         ],
       ),
@@ -143,14 +144,14 @@ class CategoryListItemWidget extends StatelessWidget {
         children: [
           Text(
             categoryListItemObj.groceries!,
-            style: theme.textTheme.labelSmall,
+            style: theme.textTheme.labelSmall?.copyWith(fontSize: 8.h),
           ),
           Padding(
             padding: EdgeInsets.only(right: 8.h),
             child: Text(
               categoryListItemObj.toys!,
               textAlign: TextAlign.center,
-              style: theme.textTheme.labelSmall,
+              style: theme.textTheme.labelSmall?.copyWith(fontSize: 8.h),
             ),
           ),
         ],

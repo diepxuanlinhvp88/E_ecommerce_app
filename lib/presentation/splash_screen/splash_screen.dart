@@ -39,17 +39,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: appTheme.deepPurpleA200,
-        body: Center(
-          child: SizedBox(
-            height: 200.h,
-            width: 200.h,
-            child: const CustomImageView(
-              imagePath: 'lib/assets/images/logo.svg',
-              fit: BoxFit.contain,
-            ),
+    return Scaffold(
+      backgroundColor: appTheme.deepPurpleA200,
+      body: Center(
+        child: SizedBox(
+          height: 200.h,
+          width: 200.h,
+          child: const CustomImageView(
+            imagePath: 'lib/assets/images/logo.svg',
+            fit: BoxFit.contain,
           ),
         ),
       ),

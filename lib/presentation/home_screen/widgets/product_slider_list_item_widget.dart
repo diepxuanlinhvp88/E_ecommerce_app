@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:untitled/core/app_export.dart';
 import 'package:untitled/model/Product.dart';
 
@@ -9,24 +10,24 @@ class ProductSliderListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 98.h,
-      height: 116.h,
+    return Container(
+      color: Colors.white,
+      width: 110.h,
+      height: 140.h,
       child: Stack(
         alignment: Alignment.center,
         children: [
           CustomImageView(
             imagePath: product.img_link,
-            height: 116.h,
-            width: double.maxFinite,
+            fit: BoxFit.contain,
           ),
+          SizedBox(height: 32.h),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: EdgeInsets.only(bottom: 8.h),
               child: Text(
-                product.discount_percentage!,
-                overflow: TextOverflow.ellipsis,
+                'SALE ${product.discount_percentage}',
                 style: CustomTextStyles.labelLargePrimary,
               ),
             ),
