@@ -3,6 +3,7 @@ import '../presentation/splash_screen/splash_screen.dart';
 import '../presentation/welcome_onboarding_screen/welcome_onboarding_screen.dart';
 import '../presentation/sign_in_screen/sign_in_screen.dart';
 import '../presentation/sign_up_screen/sign_up_screen.dart';
+import '../presentation/home_screen/home_screen.dart';
 
 
 import 'package:flutter/cupertino.dart';
@@ -24,7 +25,7 @@ class AppRoutes {
     initialRoute: (context) => const SplashScreen(),
     splashScreen: (context) => const SplashScreen(),
     signInScreen: (context) => const SignInScreen(),
-    // homeScreen: (context) => const HomeScreen(),
+    homeScreen: (context) => const HomeScreen(),
     signUpScreen: (context) => const SignUpScreen(),
     welcomeOnboardingScreen: (context) => const WelcomeOnboardingScreen(),
   };

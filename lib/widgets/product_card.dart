@@ -1,34 +1,11 @@
-class Product {
-  final String product_id,
-      product_name,
-      about_product,
-      product_link,
-      discount_percentage;
-  final double actual_price, rating, discounted_price;
-  final int rating_count;
-  final String user_id, img_link;
-  final dynamic reviews;
-  final dynamic category;
+import 'package:flutter/cupertino.dart';
+import 'package:untitled/core/app_export.dart';
+import 'package:untitled/model/Product.dart';
 
-  Product({
-    required this.discount_percentage,
-    required this.discounted_price,
-    required this.product_id,
-    required this.product_name,
-    required this.category,
-    required this.about_product,
-    required this.actual_price,
-    required this.rating,
-    required this.rating_count,
-    required this.user_id,
-    required this.img_link,
-    required this.product_link,
-    required this.reviews,
-  });
-}
+class ProductCard extends StatelessWidget {
+  ProductCard(this.product, {super.key});
 
-List<Product> products = [
-  Product(
+  var product = Product(
       product_id: "B07JW9H4J1",
       product_name:
       "Wayona Nylon Braided USB to Lightning Fast Charging and Data Sync Cable Compatible for iPhone 13, 12,11, X, 8, 7, 6, 5, iPad Air, Pro, Mini (3 FT Pack of 1, Grey)",
@@ -103,7 +80,76 @@ List<Product> products = [
           "https://m.media-amazon.com/images/W/WEBP_402378-T1/images/I/81---F1ZgHL._SY88.jpg",
           "user_name": "S.ARUMUGAM"
         }
-      ]),
+      ]);
 
-];
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 234.h,
+      width: 175.h,
+      decoration: BoxDecoration(
+        color: appTheme.whiteA700,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          CustomImageView(
+            imagePath: product.img_link,
+            height: 158.h,
+            width: double.maxFinite,
+          ),
+          SizedBox(height: 4.h),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 8.h),
+              child: Text(
+                product.product_name,
+                maxLines: 2,
+                style: theme.textTheme.labelMedium,
+              ),
+            ),
+          ),
+          const Spacer(),
+          Container(
+            width: double.maxFinite,
+            margin: EdgeInsets.symmetric(horizontal: 8.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${product.discounted_price}',
+                  style: CustomTextStyles.labelLargePrimary,
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 2.h),
+                      child: Text(
+                        '${product.discounted_price}',
+                        style: CustomTextStyles.labelLargePrimary.copyWith(
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    ),
+                ),
+                const Spacer(),
+                Text(
+                  '${product.rating}',
+                ),
+                // Padding(
+                //   padding: EdgeInsets.only(left: 2.h),
+                //   child: CustomRatingBar(),
+                // ),
+                Text(
+                  '${product.rating_count}',
+                )
+              ],
+            ),
+          )
 
+        ],
+      )
+    );
+  }
+}
