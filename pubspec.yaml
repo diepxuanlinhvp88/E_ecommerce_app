@@ -76,6 +76,12 @@ flutter:
     - lib/assets/images/banner1.png
     - lib/assets/images/banner2.png
     - lib/assets/images/img_welcome_onboarding.jpg
+    - lib/assets/icons/computer_and_accessories.svg
+    - lib/assets/icons/home_and_kitchen.svg
+    - lib/assets/icons/fashion_and_apparel.svg
+    - lib/assets/icons/groceries.svg
+    - lib/assets/icons/toys.svg
+    - lib/assets/icons/books_and_media.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

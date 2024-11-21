@@ -29,10 +29,16 @@ class Assets {
   static const String iconsAddToCart = 'lib/assets/icons/add_to_cart.svg';
   static const String iconsBack = 'lib/assets/icons/back.svg';
   static const String iconsBag1 = 'lib/assets/icons/bag_1.svg';
+  static const String iconsBooksAndMedia = 'lib/assets/icons/books_and_media.svg';
   static const String iconsCart = 'lib/assets/icons/cart.svg';
+  static const String iconsComputerAndAccessories = 'lib/assets/icons/computer_and_accessories.svg';
+  static const String iconsFashionAndApparel = 'lib/assets/icons/fashion_and_apparel.svg';
+  static const String iconsGroceries = 'lib/assets/icons/groceries.svg';
   static const String iconsHeart = 'lib/assets/icons/heart.svg';
+  static const String iconsHomeAndKitchen = 'lib/assets/icons/home_and_kitchen.svg';
   static const String iconsKey = 'lib/assets/icons/key.png';
   static const String iconsSearch = 'lib/assets/icons/search.svg';
+  static const String iconsToys = 'lib/assets/icons/toys.svg';
   static const String imagesBanner1 = 'lib/assets/images/banner1.png';
   static const String imagesBanner2 = 'lib/assets/images/banner2.png';
   static const String imagesImgWelcomeOnboarding = 'lib/assets/images/img_welcome_onboarding.jpg';
