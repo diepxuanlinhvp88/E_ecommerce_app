@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String assetsData  = 'lib/assets/data .json';
   static const String assetsIconsBooksAndMedia = 'lib/assets/icons/books_and_media.svg';
   static const String assetsIconsComputerAndAccessories = 'lib/assets/icons/computer_and_accessories.svg';
   static const String assetsIconsFashionAndApparel = 'lib/assets/icons/fashion_and_apparel.svg';
@@ -20,6 +21,7 @@ class Assets {
   static const String authenForgotPass = 'lib/screen/authen/forgotPass.dart';
   static const String authenRegister = 'lib/screen/authen/register.dart';
   static const String authenSignIn = 'lib/screen/authen/sign_in.dart';
+  static const String componentAppBar = 'lib/presentation/detail_screen/component/app_bar.dart';
   static const String componentsAddToCart = 'lib/screen/details/components/add_to_cart.dart';
   static const String componentsBody = 'lib/screen/home/components/body.dart';
   static const String componentsCartCounter = 'lib/screen/details/components/cart_counter.dart';
@@ -30,6 +32,10 @@ class Assets {
   static const String componentsProductTitleWithImage = 'lib/screen/details/components/product_title_with_image.dart';
   static const String componentsSizeProduct = 'lib/screen/details/components/size_product.dart';
   static const String coreAppExport = 'lib/core/app_export.dart';
+  static const String databaseDatabaseService = 'lib/services/Database/DatabaseService.dart';
+  static const String detailScreenDetailScreen = 'lib/presentation/detail_screen/detail_screen.dart';
+  static const String detailUpdateDetail = 'lib/screen/detail_update/detail.dart';
+  static const String detailUpdateStartRating = 'lib/screen/detail_update/start_rating.dart';
   static const String detailsComponentsBody = 'lib/screen/details/components/body.dart';
   static const String detailsDetailsScreen = 'lib/screen/details/details_screen.dart';
   static const String forgotPasswordScreenForgotPassword = 'lib/presentation/forgot_password_screen/forgot_password.dart';
@@ -43,6 +49,7 @@ class Assets {
   static const String iconsCart = 'lib/assets/icons/cart.svg';
   static const String iconsComputerAndAccessories = 'lib/assets/icons/computer_and_accessories.svg';
   static const String iconsFashionAndApparel = 'lib/assets/icons/fashion_and_apparel.svg';
+  static const String iconsFiRrEdit = 'lib/assets/icons/fi-rr-edit.svg';
   static const String iconsGroceries = 'lib/assets/icons/groceries.svg';
   static const String iconsHeart = 'lib/assets/icons/heart.svg';
   static const String iconsHomeAndKitchen = 'lib/assets/icons/home_and_kitchen.svg';
@@ -59,7 +66,11 @@ class Assets {
   static const String imagesLogo = 'lib/assets/images/logo.svg';
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
+  static const String libModelReviews = 'lib/widgets/lib/model/reviews.dart';
+  static const String modelCountQuantity = 'lib/presentation/detail_screen/model/count_quantity.dart';
   static const String modelProduct = 'lib/model/Product.dart';
+  static const String modelReviews = 'lib/model/reviews.dart';
+  static const String modelStartRating = 'lib/presentation/detail_screen/model/start_rating.dart';
   static const String modelUser = 'lib/model/user.dart';
   static const String modelsBannerListItemModel = 'lib/presentation/home_screen/models/banner_list_item_model.dart';
   static const String modelsCategoryListItemModel = 'lib/presentation/home_screen/models/category_list_item_model.dart';
@@ -75,7 +86,7 @@ class Assets {
   static const String routesAppRoutes = 'lib/routes/app_routes.dart';
   static const String screenWrapper = 'lib/screen/wrapper.dart';
   static const String servicesAuthService = 'lib/services/auth_service.dart';
-  static const String servicesDatabaseService = 'lib/services/DatabaseService.dart';
+  static const String servicesProductService = 'lib/services/product_service.dart';
   static const String sharedConstants = 'lib/shared/constants.dart';
   static const String sharedLoading = 'lib/shared/loading.dart';
   static const String signInScreenSignInScreen = 'lib/presentation/sign_in_screen/sign_in_screen.dart';
