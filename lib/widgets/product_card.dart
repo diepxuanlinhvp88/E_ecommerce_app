@@ -10,7 +10,6 @@ import 'package:untitled/widgets/lib/model/reviews.dart';
 class ProductCard extends StatelessWidget {
   ProductCard(this.product, {super.key});
 
-
   final Product product;
 
   @override
@@ -27,10 +26,9 @@ class ProductCard extends StatelessWidget {
             CustomImageView(
               imagePath: product.img_link,
               height: 158.h,
-              width: double.maxFinite,
+              width: 130.h,
               fit: BoxFit.contain,
             ),
-
             SizedBox(height: 4.h),
             Align(
               alignment: Alignment.centerLeft,
@@ -47,40 +45,49 @@ class ProductCard extends StatelessWidget {
             Container(
               width: double.maxFinite,
               margin: EdgeInsets.symmetric(horizontal: 8.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
                 children: [
-                  Text(
-                    '\$${product.actual_price.toInt()}',
-                    style: CustomTextStyles.labelLargePrimary
-                        .copyWith(fontSize: 18),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 2.h),
-                      child: Text(
-                        '\$${product.discounted_price.toInt()}',
-                        style: CustomTextStyles.labelLargePrimary.copyWith(
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: appTheme.blueGray100,
-                            color: appTheme.blueGray100,
-                            fontSize: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '\$${product.actual_price.toInt()}',
+                        style: CustomTextStyles.labelLargePrimary
+                            .copyWith(fontSize: 16),
                       ),
-                    ),
-                  ),
-                  const Spacer(),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 2.h),
+                          child: Text(
+                            '\$${product.discounted_price.toInt()}',
+                            style: CustomTextStyles.labelLargePrimary.copyWith(
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: appTheme.blueGray100,
+                                color: appTheme.blueGray100,
+                                fontSize: 14),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+
                   Text(
                     '${product.rating}',
-                    style: TextStyle(fontSize: 10, color: appTheme.orangeA200),
+                    style: TextStyle(fontSize: 14, color: appTheme.orangeA200),
                   ),
-                  Padding(
-                      padding: EdgeInsets.only(left: 2.h),
-                      child: CustomRatingBar(
-                        ignoreGestures: true,
-                        initialRating: product.rating,
-                        color: appTheme.orangeA200,
-                      )),
+                  Icon(
+                    Icons.star,
+                    color: LightCodeColors().orangeA200,
+                  ),
+                  // Padding(
+                  //     padding: EdgeInsets.only(left: 1.h),
+                  //     child: CustomRatingBar(
+                  //       ignoreGestures: true,
+                  //       initialRating: product.rating,
+                  //       color: appTheme.orangeA200,
+                  //     )),
+                    ],
+                  ),
                 ],
               ),
             )

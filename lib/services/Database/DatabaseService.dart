@@ -1,33 +1,32 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../firebase_options.dart';
+import '../../model/Product.dart';
+
 class DatabaseService {
-  final String uid;
-
-  DatabaseService({required this.uid});
-
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  final CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection('user');
-
-  Future updateUserData(String sugar, String name, int strength) async {
-    return await collectionReference
-        .doc(uid)
-        .set({'sugar': sugar, 'name': name, 'strength': strength});
-  }
 
   Future<void> uploadProducts(String jsonFilePath) async {
     try {
-      // Đọc file JSON từ assets
+
       final String response = await rootBundle.loadString(jsonFilePath);
       final List<dynamic> data = jsonDecode(response);
+      if (data.isEmpty) {
+        print('No data found in the JSON file.');
+        return;
+      }
 
-      // Lặp qua từng sản phẩm và upload lên Firestore
       for (var product in data) {
-        await _firestore.collection('products').add(product);
+        if (product is Map<String, dynamic>) {
+          await _firestore.collection('products').add(product);
+        } else {
+          print('Invalid product format: $product');
+        }
       }
 
       print('Upload successful!');
@@ -35,9 +34,39 @@ class DatabaseService {
       print('Error uploading products: $e');
     }
   }
-}
-void main() async{
-  await DatabaseService( uid: 'abc').uploadProducts('lib/assets/data .json');
+  Future<List<Product>> fetchAllProducts() async {
+    try {
+      //querry
+      QuerySnapshot snapshot = await _firestore.collection('products').get();
+      print('querry data thanh cong');
+
+      //change
+      return snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
+    } catch (e) {
+      print('Error fetching products: $e');
+      return [];
+    }
+  }
 
 
 }
+
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//
+//   // Khởi tạo Firebase
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//
+//   // Tạo đối tượng DatabaseService
+//   final databaseService = DatabaseService();
+//
+//   const jsonFilePath = 'lib/assets/data .json';
+//
+//   try {
+//     await databaseService.uploadProducts(jsonFilePath);
+//   } catch (e) {
+//     print('Failed to upload products: $e');
+//   }
+// }

@@ -86,7 +86,7 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 32.h),
                   _buildCategorySliderSection(context),
-                  // SizedBox(height: 22.h),
+                  // SizedBox(height: 16.h),
                   Padding(
                     padding: EdgeInsets.only(left: 16.h),
                     child: Text(
@@ -95,7 +95,8 @@ class HomeScreenState extends State<HomeScreen> {
                           .copyWith(fontSize: 14.h),
                     ),
                   ),
-                  SizedBox(height: 16.h),
+
+                  // SizedBox(height: 16.h),
                   Container(
                     width: double.maxFinite,
                     padding:
@@ -104,7 +105,8 @@ class HomeScreenState extends State<HomeScreen> {
                       color: appTheme.blueGray100.withOpacity(0.38),
                     ),
                     child: Column(
-                      children: [_buildRecommendedProductGrid(context)],
+                      children: [
+                        _buildRecommendedProductGrid(context)],
                     ),
                   )
                 ],

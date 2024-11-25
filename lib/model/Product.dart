@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:untitled/model/reviews.dart';
 
@@ -53,6 +55,27 @@ class Product {
     );
   }
 
+  factory Product.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    final List<Review> reviews = (data['reviews'] as List<dynamic>?)
+        ?.map((item) => Review.fromMap(item as Map<String, dynamic>))
+        .toList() ?? [];
+    return Product(
+        discount_percentage: data['discount_percentage'],
+        discounted_price: data['discounted_price'],
+        product_id: data['product_id'],
+        product_name: data['product_name'],
+        category: data['category'],
+        about_product: data['about_product'],
+        actual_price: data['actual_price'],
+        rating: data['rating'],
+        rating_count: data['rating_count'],
+        user_id: doc.id,
+        img_link: data['img_link'],
+        product_link: data['product_link'],
+        reviews: reviews);
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'product_id': product_id,
@@ -72,10 +95,8 @@ class Product {
 
 Future<List<Product>> loadJsonFromAssets() async {
   try {
-    // Đọc file JSON từ assets
     final jsonString = await rootBundle.loadString('lib/assets/data .json');
 
-    // Parse chuỗi JSON
     final jsonData = json.decode(jsonString);
     final products = (jsonData as List<dynamic>)
         .map((item) => Product.fromJson(item as Map<String, dynamic>))

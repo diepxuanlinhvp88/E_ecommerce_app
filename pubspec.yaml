@@ -41,16 +41,12 @@ dependencies:
   provider: ^6.1.2
   flutter_spinkit: ^5.2.1
   flutter_svg: ^1.1.5
-<<<<<<< HEAD
-  csv: ^6.0.0
-  path_provider: ^2.1.5
-=======
   responsive_grid_list: ^1.4.0
   carousel_slider_plus: ^7.0.0
   flutter_rating_bar: ^4.0.1
   http: ^1.2.0
   cached_network_image: ^3.4.1
->>>>>>> hieunc
+
 
 dev_dependencies:
   flutter_test:
@@ -78,11 +74,6 @@ flutter:
   assets:
     - lib/assets/icons/
     - lib/assets/images/
-<<<<<<< HEAD
-    - lib/assets/images/bag_1.png
-    - lib/assets/data .json
-
-=======
     - lib/assets/images/logo.svg
     - lib/assets/images/banner1.png
     - lib/assets/images/banner2.png
@@ -94,7 +85,7 @@ flutter:
     - lib/assets/icons/toys.svg
     - lib/assets/icons/books_and_media.svg
     - lib/assets/data .json
->>>>>>> hieunc
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
