@@ -61,7 +61,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         elevation: 1,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pushNamed(context, AppRoutes.homeScreen)
+          onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.homeScreen)
         ),
         title: Container(
           height: 40,
