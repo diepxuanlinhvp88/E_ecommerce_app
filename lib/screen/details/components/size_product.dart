@@ -28,7 +28,7 @@ class sizeProduct extends StatelessWidget {
                     children: [
                   TextSpan(text: "Size\n"),
                   TextSpan(
-                      text: "${product.size} cm",
+                      text: "${product.rating} cm",
                       style: Theme.of(context)
                           .textTheme
                           .headlineSmall!

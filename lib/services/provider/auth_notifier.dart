@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:untitled/model/user.dart';
-import 'package:untitled/services/DatabaseService.dart';
+import 'package:untitled/services/Database/DatabaseService.dart';
 
 class AuthNotifier extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;

@@ -35,6 +35,7 @@ class _SignInScreenState extends State<SignInScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           children: [
+
             _buildForm(),
             _buildForgotPasswordButton(context),
             _buildSignInButtons(authService),
