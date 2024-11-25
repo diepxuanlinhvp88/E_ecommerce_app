@@ -4,32 +4,48 @@ import 'package:untitled/core/app_export.dart';
 import 'package:untitled/model/Product.dart';
 import 'package:untitled/services/product_service.dart';
 import '../../../model/Product.dart';
+import '../../../services/Database/DatabaseService.dart';
 import 'banner_list_item_model.dart';
 import 'category_list_item_model.dart';
 
 class HomeScreenModel {
+  final DatabaseService databaseService = DatabaseService();
+
+  Future<List<Product>> getAllProductFirestore() async {
+    final productList = await databaseService.fetchAllProducts();
+    return productList;
+  }
+
   List<BannerListItemModel> bannerList = [
     BannerListItemModel(image: "lib/assets/images/banner1.png"),
     BannerListItemModel(image: "lib/assets/images/banner2.png"),
   ];
 
   Future<List<Product>> getTrendingProductList() async {
-    Future<List<Product>> jsonProducts = ProductService().loadProductsFromJson();
-    final productList = await jsonProducts;
-    return productList.take(20).toList();
-  }
+    if (getAllProductFirestore() != null) {
+      final productList = await databaseService.fetchAllProducts();
+      return productList.take(5).toList();
+    }
 
+    return [];
+  }
 
   Future<List<Product>> getSaleProductList() async {
-    Future<List<Product>> jsonProducts = ProductService().loadProductsFromJson();
-    final productList = await jsonProducts;
-    return productList.take(5).toList();
+    if (getAllProductFirestore() != null) {
+      final productList = await databaseService.fetchAllProducts();
+      return productList.take(5).toList();
+    }
+
+    return [];
   }
 
-  Future<List<Product>> recommendedProductList() async{
-    Future<List<Product>> jsonProducts = ProductService().loadProductsFromJson();
-    final productList = await jsonProducts;
-    return productList.take(6).toList();
+  Future<List<Product>> recommendedProductList() async {
+    if (getAllProductFirestore() != null) {
+      final productList = await databaseService.fetchAllProducts();
+      return productList.take(6).toList();
+    }
+
+    return [];
   }
 
   List<CategoryListItemModel> categoryList = [
