@@ -6,6 +6,7 @@ import 'core/app_export.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'presentation/home_screen/provider/home_screen_provider.dart';
+import 'presentation/forgot_password_screen/provider/forgot_password_provider.dart';
 
 var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -20,6 +21,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
+        ChangeNotifierProvider(create: (_) => ForgotPasswordProvider())
       ],
       child: const MyApp(),
     ),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/data/models/selection_popup_model.dart';
@@ -25,8 +26,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
 
-  String _selectedNationality = 'Vietnam';
-  String _selectedGender = 'Male';
+  final String _selectedNationality = 'Vietnam';
+  final String _selectedGender = 'Male';
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _acceptedTerms = false;
@@ -65,20 +66,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
 
     try {
-      final bool success = (await authProvider.signUp(
-        email: _emailController.text,
-        password: _passwordController.text,
+      final UserCredential? userCredential = await authProvider.signUp(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
         userModel: userModel,
-      )) as bool;
+      );
 
-      if (success && mounted) {
-        Navigator.of(context).pushReplacementNamed('/home');
+      if (userCredential != null && userCredential.user != null) {
+        print("Signup successful!");
+        Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen);
+      } else {
+        throw Exception("Signup failed");
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
     }
+
   }
 
   @override
