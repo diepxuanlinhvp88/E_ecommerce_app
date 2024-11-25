@@ -10,7 +10,7 @@ class Assets {
   static const String authenForgotPass = 'lib/screen/authen/forgotPass.dart';
   static const String authenRegister = 'lib/screen/authen/register.dart';
   static const String authenSignIn = 'lib/screen/authen/sign_in.dart';
-  static const String banner1.pngBanner1 = 'lib/assets/banner1.png/banner1.png';
+  static const String banner1 = 'lib/assets/banner1.png/banner1.png';
   static const String componentsAddToCart = 'lib/screen/details/components/add_to_cart.dart';
   static const String componentsBody = 'lib/screen/home/components/body.dart';
   static const String componentsCartCounter = 'lib/screen/details/components/cart_counter.dart';

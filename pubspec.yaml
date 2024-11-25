@@ -45,6 +45,7 @@ dependencies:
   carousel_slider_plus: ^7.0.0
   flutter_rating_bar: ^4.0.1
   http: ^1.2.0
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +83,7 @@ flutter:
     - lib/assets/icons/groceries.svg
     - lib/assets/icons/toys.svg
     - lib/assets/icons/books_and_media.svg
+    - lib/assets/data .json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
