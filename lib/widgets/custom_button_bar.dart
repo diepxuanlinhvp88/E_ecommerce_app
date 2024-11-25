@@ -148,7 +148,7 @@ class CustomBottomBarState extends State<CustomBottomBar> {
 
           // Lấy tên route từ _getRouteNameFromType
           String routeName = _getRouteNameFromType(bottomMenuList[index].type);
-          Navigator.pushNamed(context, routeName); // Điều hướng đến màn hình
+          Navigator.pushReplacementNamed(context, routeName); // Điều hướng đến màn hình
 
           // Gọi callback nếu có
           widget.onChanged?.call(bottomMenuList[index].type);
