@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "745582531243",
-    "project_id": "e-app-a0a8a",
-    "storage_bucket": "e-app-a0a8a.appspot.com"
+    "project_number": "408189535372",
+    "project_id": "globalcard-ff50f",
+    "storage_bucket": "globalcard-ff50f.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:745582531243:android:e7aae17122ca35a1ae5dee",
+        "mobilesdk_app_id": "1:408189535372:android:cd0e308021b45a403527a9",
         "android_client_info": {
           "package_name": "com.example.untitled"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBiJJ097-VLSU8Q8Q_EiZ3ksulkyRKeQOs"
+          "current_key": "AIzaSyAP-9dDNFQ2CaKOiuXfc5SRaf-QM1GhNoA"
         }
       ],
       "services": {
