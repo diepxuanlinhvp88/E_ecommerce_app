@@ -2,8 +2,11 @@ import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:untitled/presentation/detail_screen/detail_screen.dart';
 import 'package:untitled/presentation/home_screen/models/banner_list_item_model.dart';
+import 'package:untitled/presentation/home_screen/models/home_screen_model.dart';
 import '../../core/app_export.dart';
+import '../../model/Product.dart';
 import '../../widgets/custom_text_form_field.dart';
 import 'widgets/banner_list_item_widget.dart';
 import 'widgets/product_slider_list_item_widget.dart';
@@ -11,7 +14,6 @@ import 'widgets/category_list_item_widget.dart';
 import 'package:untitled/widgets/product_card.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'provider/home_screen_provider.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,27 +38,27 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80.0),
-          child: AppBar(
-            backgroundColor: Colors.transparent.withOpacity(0),
-            elevation: 0,
-            centerTitle: true,
-            toolbarHeight: 110.0,
-            flexibleSpace: ClipRRect(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(12.h),
-                bottomRight: Radius.circular(12.h),
-              ),
-              child: Container(
-                color: appTheme.deepPurpleA200,
-              ),
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent.withOpacity(0),
+          elevation: 0,
+          centerTitle: true,
+          toolbarHeight: 110.0,
+          flexibleSpace: ClipRRect(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(12.h),
+              bottomRight: Radius.circular(12.h),
             ),
-            title: _buildSearchSection(context),
+            child: Container(
+              color: appTheme.deepPurpleA200,
+            ),
           ),
+          title: _buildSearchSection(context),
         ),
-        body: SizedBox(
+      ),
+      body: SizedBox(
           width: double.maxFinite,
           child: SingleChildScrollView(
             child: SizedBox(
@@ -89,13 +91,15 @@ class HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.only(left: 16.h),
                     child: Text(
                       "Recommend For You".toUpperCase(),
-                      style: CustomTextStyles.labelLargePrimary.copyWith(fontSize: 14.h),
+                      style: CustomTextStyles.labelLargePrimary
+                          .copyWith(fontSize: 14.h),
                     ),
                   ),
                   SizedBox(height: 16.h),
                   Container(
                     width: double.maxFinite,
-                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.h),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.h),
                     decoration: BoxDecoration(
                       color: appTheme.blueGray100.withOpacity(0.38),
                     ),
@@ -106,9 +110,8 @@ class HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-          )
-        ),
-      );
+          )),
+    );
   }
 
   Widget _buildSearchSection(BuildContext context) {
@@ -118,7 +121,8 @@ class HomeScreenState extends State<HomeScreen> {
         builder: (context, searchController, child) {
           return CustomTextFormField(
             hintText: "Search",
-            contentPadding: EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
             controller: searchController,
           );
         },
@@ -132,14 +136,19 @@ class HomeScreenState extends State<HomeScreen> {
         return CarouselSlider.builder(
           itemCount: 2,
           itemBuilder: (context, index, realIndex) {
-            BannerListItemModel model = provider.homeScreenModel.bannerList[index];
+            BannerListItemModel model =
+                provider.homeScreenModel.bannerList[index];
             return BannerListItemWidget(model);
           },
           options: CarouselOptions(
-            height: 140.h, // Adjust height as needed
-            viewportFraction: 0.8, // Shows partial next and previous items
-            enlargeCenterPage: false, // Makes the current item larger
-            autoPlay: true, // Auto-scrolling
+            height: 140.h,
+            // Adjust height as needed
+            viewportFraction: 0.8,
+            // Shows partial next and previous items
+            enlargeCenterPage: false,
+            // Makes the current item larger
+            autoPlay: true,
+            // Auto-scrolling
             autoPlayInterval: const Duration(seconds: 3),
             autoPlayAnimationDuration: const Duration(milliseconds: 800),
             autoPlayCurve: Curves.fastOutSlowIn,
@@ -166,16 +175,37 @@ class HomeScreenState extends State<HomeScreen> {
           SizedBox(height: 6.h),
           Container(
             width: double.maxFinite,
-            child: Consumer<HomeScreenProvider>(
-              builder: (context, provider, child) {
-                final items = provider.homeScreenModel.trendingProductList;
+            child: FutureBuilder<List<Product>>(
+              future: HomeScreenModel().getTrendingProductList(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(
+                      child: Text('No products available')); // Không có dữ liệu
+                }
+
+                final items = snapshot.data!;
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Wrap(
                     direction: Axis.horizontal,
                     spacing: 6.h,
                     children: List.generate(items.length, (index) {
-                      return ProductSliderListItemWidget(items[index]);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetailScreen(product: items[index]),
+                            ),
+                          );
+                        },
+                        child: ProductSliderListItemWidget(items[index]),
+                      );
                     }),
                   ),
                 );
@@ -201,16 +231,37 @@ class HomeScreenState extends State<HomeScreen> {
           SizedBox(height: 6.h),
           Container(
             width: double.maxFinite,
-            child: Consumer<HomeScreenProvider>(
-              builder: (context, provider, child) {
-                final items = provider.homeScreenModel.saleProductList;
+            child: FutureBuilder<List<Product>>(
+              future: HomeScreenModel().getSaleProductList(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(
+                      child: Text('No products available')); // Không có dữ liệu
+                }
+
+                final items = snapshot.data!;
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Wrap(
                     direction: Axis.horizontal,
                     spacing: 6.h,
                     children: List.generate(items.length, (index) {
-                      return ProductSliderListItemWidget(items[index]);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetailScreen(product: items[index]),
+                            ),
+                          );
+                        },
+                        child: ProductSliderListItemWidget(items[index]),
+                      );
                     }),
                   ),
                 );
@@ -231,20 +282,19 @@ class HomeScreenState extends State<HomeScreen> {
 
           return CarouselSlider.builder(
             options: CarouselOptions(
-              height: 110.h, // Responsive height
+              height: 110.h,
+              // Responsive height
               initialPage: 0,
               autoPlay: true,
               viewportFraction: 0.2,
               scrollDirection: Axis.horizontal,
-              onPageChanged: (index, _) =>
-                  provider.changeSliderIndex(index),
+              onPageChanged: (index, _) => provider.changeSliderIndex(index),
             ),
             itemCount: categoryList.length,
             itemBuilder: (context, index, _) {
               return CategoryListItemWidget(
                 categoryListItemObj: categoryList[index],
-                onTap: () {
-                },
+                onTap: () {},
               );
             },
           );
@@ -254,30 +304,44 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildRecommendedProductGrid(BuildContext context) {
-    return Consumer<HomeScreenProvider>(
-      builder: (context, provider, _) {
-        final recommendedProducts = provider.homeScreenModel.recommendedProductList;
-        return ResponsiveGridListBuilder(
-          minItemWidth: 150,
-          minItemsPerRow: 2,
-          maxItemsPerRow: 4,
-          horizontalGridSpacing: 10,
-          verticalGridSpacing: 10,
-          builder: (BuildContext context, List<Widget> productWidgets) => ListView(
+    return FutureBuilder<List<Product>>(
+      future: HomeScreenModel().recommendedProductList(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No related products found.'));
+        } else {
+          final relatedProducts = snapshot.data!;
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.75,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            children: productWidgets,
-          ),
-          gridItems: recommendedProducts.map((product) {
-            return GestureDetector(
-              onTap: () {
-                // Navigator.pushNamed(context, AppRoutes.productDetailScreen);
-              },
-              child: ProductCard(product),
-            );
-          }).toList(),
-        );
+            itemCount: 6,
+            itemBuilder: (context, index) {
+              final product = relatedProducts[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ProductDetailScreen(product: product),
+                    ),
+                  );
+                },
+                child: ProductCard(product),
+              );
+            },
+          );
+        }
       },
     );
   }

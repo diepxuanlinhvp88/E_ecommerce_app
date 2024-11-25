@@ -94,7 +94,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           textInputType: TextInputType.emailAddress,
                           contentPadding: EdgeInsets.all(10.h),
                           validator: (value) {
-                            if (value == null) {
+                            if (value == null || value.isEmpty) {
                               return "Please enter valid email";
                             }
                             return null;
@@ -137,7 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           obscureText: _isPasswordVisible,
                           contentPadding: EdgeInsets.all(10.h),
                           validator: (value) {
-                            if (value == null) {
+                            if (value == null || value.isEmpty) {
                               return "Please enter valid password";
                             }
                             return null;
@@ -238,11 +238,12 @@ class _SignInScreenState extends State<SignInScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      Navigator.pushNamed(context, '/home'); // Navigate to home screen on success
+      Navigator.pushNamed(context, AppRoutes.homeScreen); // Navigate to home screen on success
     } catch (e) {
       setState(() {
         error = e.toString();
       });
+      print(error);
     } finally {
       setState(() {
         loading = false;

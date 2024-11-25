@@ -133,4 +133,10 @@ class CustomTextStyles {
       theme.textTheme.titleSmall!.copyWith(
         color: theme.colorScheme.primary,
       );
+
+  static TextStyle get titleProductBlack =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.black900
+      );
+
 }
