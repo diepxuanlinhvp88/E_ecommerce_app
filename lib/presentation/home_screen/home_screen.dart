@@ -42,7 +42,7 @@ class HomeScreenState extends State<HomeScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80.0),
         child: AppBar(
-          backgroundColor: Colors.transparent.withOpacity(0),
+          backgroundColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
           toolbarHeight: 110.0,
@@ -57,6 +57,7 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           title: _buildSearchSection(context),
         ),
+        // title: _buildSearchSection(context),
       ),
       body: SizedBox(
           width: double.maxFinite,
@@ -86,7 +87,7 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 32.h),
                   _buildCategorySliderSection(context),
-                  // SizedBox(height: 16.h),
+                  // SizedBox(height: 22.h),
                   Padding(
                     padding: EdgeInsets.only(left: 16.h),
                     child: Text(
@@ -95,8 +96,7 @@ class HomeScreenState extends State<HomeScreen> {
                           .copyWith(fontSize: 14.h),
                     ),
                   ),
-
-                  // SizedBox(height: 16.h),
+                  SizedBox(height: 16.h),
                   Container(
                     width: double.maxFinite,
                     padding:
@@ -105,8 +105,7 @@ class HomeScreenState extends State<HomeScreen> {
                       color: appTheme.blueGray100.withOpacity(0.38),
                     ),
                     child: Column(
-                      children: [
-                        _buildRecommendedProductGrid(context)],
+                      children: [_buildRecommendedProductGrid(context)],
                     ),
                   )
                 ],

@@ -2,6 +2,16 @@
 class Assets {
   Assets._();
 
+  static const String assetsIconsBooksAndMedia = 'lib/assets/icons/books_and_media.svg';
+  static const String assetsIconsComputerAndAccessories = 'lib/assets/icons/computer_and_accessories.svg';
+  static const String assetsIconsFashionAndApparel = 'lib/assets/icons/fashion_and_apparel.svg';
+  static const String assetsIconsGroceries = 'lib/assets/icons/groceries.svg';
+  static const String assetsIconsHomeAndKitchen = 'lib/assets/icons/home_and_kitchen.svg';
+  static const String assetsIconsNavAccount = 'lib/assets/icons/nav_account.svg';
+  static const String assetsIconsNavCart = 'lib/assets/icons/nav_cart.svg';
+  static const String assetsIconsNavHome = 'lib/assets/icons/nav_home.svg';
+  static const String assetsIconsNavMenu = 'lib/assets/icons/nav_menu.svg';
+  static const String assetsIconsToys = 'lib/assets/icons/toys.svg';
   static const String assetsImagesBanner1 = 'lib/assets/images/banner1.png';
   static const String assetsImagesBanner2 = 'lib/assets/images/banner2.png';
   static const String assetsImagesImgWelcomeOnboarding = 'lib/assets/images/img_welcome_onboarding.jpg';
@@ -10,7 +20,6 @@ class Assets {
   static const String authenForgotPass = 'lib/screen/authen/forgotPass.dart';
   static const String authenRegister = 'lib/screen/authen/register.dart';
   static const String authenSignIn = 'lib/screen/authen/sign_in.dart';
-  static const String banner1 = 'lib/assets/banner1.png/banner1.png';
   static const String componentsAddToCart = 'lib/screen/details/components/add_to_cart.dart';
   static const String componentsBody = 'lib/screen/home/components/body.dart';
   static const String componentsCartCounter = 'lib/screen/details/components/cart_counter.dart';
@@ -23,6 +32,7 @@ class Assets {
   static const String coreAppExport = 'lib/core/app_export.dart';
   static const String detailsComponentsBody = 'lib/screen/details/components/body.dart';
   static const String detailsDetailsScreen = 'lib/screen/details/details_screen.dart';
+  static const String forgotPasswordScreenForgotPassword = 'lib/presentation/forgot_password_screen/forgot_password.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String homeHome = 'lib/screen/home/home.dart';
   static const String homeScreenHomeScreen = 'lib/presentation/home_screen/home_screen.dart';
@@ -37,6 +47,10 @@ class Assets {
   static const String iconsHeart = 'lib/assets/icons/heart.svg';
   static const String iconsHomeAndKitchen = 'lib/assets/icons/home_and_kitchen.svg';
   static const String iconsKey = 'lib/assets/icons/key.png';
+  static const String iconsNavAccount = 'lib/assets/icons/nav_account.svg';
+  static const String iconsNavCart = 'lib/assets/icons/nav_cart.svg';
+  static const String iconsNavHome = 'lib/assets/icons/nav_home.svg';
+  static const String iconsNavMenu = 'lib/assets/icons/nav_menu.svg';
   static const String iconsSearch = 'lib/assets/icons/search.svg';
   static const String iconsToys = 'lib/assets/icons/toys.svg';
   static const String imagesBanner1 = 'lib/assets/images/banner1.png';
@@ -49,11 +63,13 @@ class Assets {
   static const String modelUser = 'lib/model/user.dart';
   static const String modelsBannerListItemModel = 'lib/presentation/home_screen/models/banner_list_item_model.dart';
   static const String modelsCategoryListItemModel = 'lib/presentation/home_screen/models/category_list_item_model.dart';
+  static const String modelsForgotPasswordModel = 'lib/presentation/forgot_password_screen/models/forgot_password_model.dart';
   static const String modelsHomeScreenModel = 'lib/presentation/home_screen/models/home_screen_model.dart';
   static const String modelsSelectionPopupModel = 'lib/data/models/selection_popup_model.dart';
   static const String modelsSignUpModel = 'lib/presentation/sign_up_screen/models/sign_up_model.dart';
   static const String modelsUserModel = 'lib/data/models/user_model.dart';
   static const String providerAuthNotifier = 'lib/services/provider/auth_notifier.dart';
+  static const String providerForgotPasswordProvider = 'lib/presentation/forgot_password_screen/provider/forgot_password_provider.dart';
   static const String providerHomeScreenProvider = 'lib/presentation/home_screen/provider/home_screen_provider.dart';
   static const String providerSignUpProvider = 'lib/presentation/sign_up_screen/provider/sign_up_provider.dart';
   static const String routesAppRoutes = 'lib/routes/app_routes.dart';
@@ -71,10 +87,12 @@ class Assets {
   static const String themeThemeHelper = 'lib/theme/theme_helper.dart';
   static const String utilsImageConstant = 'lib/core/utils/image_constant.dart';
   static const String utilsSizeUtils = 'lib/core/utils/size_utils.dart';
+  static const String utilsValidationFucntions = 'lib/core/utils/validation_fucntions.dart';
   static const String welcomeOnboardingScreenWelcomeOnboardingScreen = 'lib/presentation/welcome_onboarding_screen/welcome_onboarding_screen.dart';
   static const String widgetsBannerListItemWidget = 'lib/presentation/home_screen/widgets/banner_list_item_widget.dart';
   static const String widgetsBaseButton = 'lib/widgets/base_button.dart';
   static const String widgetsCategoryListItemWidget = 'lib/presentation/home_screen/widgets/category_list_item_widget.dart';
+  static const String widgetsCustomButtonBar = 'lib/widgets/custom_button_bar.dart';
   static const String widgetsCustomDropDown = 'lib/widgets/custom_drop_down.dart';
   static const String widgetsCustomElevatedButton = 'lib/widgets/custom_elevated_button.dart';
   static const String widgetsCustomImageView = 'lib/widgets/custom_image_view.dart';
