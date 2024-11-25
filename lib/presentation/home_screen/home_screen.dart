@@ -38,21 +38,22 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80.0),
-        child: AppBar(
-          backgroundColor: Colors.transparent.withOpacity(0),
-          elevation: 0,
-          centerTitle: true,
-          toolbarHeight: 110.0,
-          flexibleSpace: ClipRRect(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(12.h),
-              bottomRight: Radius.circular(12.h),
-            ),
-            child: Container(
-              color: appTheme.deepPurpleA200,
+        extendBodyBehindAppBar: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(80.0),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            toolbarHeight: 110.0,
+            flexibleSpace: ClipRRect(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(12.h),
+                bottomRight: Radius.circular(12.h),
+              ),
+              child: Container(
+                color: appTheme.deepPurpleA200,
+              ),
             ),
           ),
           title: _buildSearchSection(context),
