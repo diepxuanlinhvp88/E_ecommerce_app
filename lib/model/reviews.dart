@@ -21,6 +21,14 @@ class Review {
     );
   }
 
+  factory Review.fromMap(Map<String, dynamic> map) {
+    return Review(
+        review_id: map['review_id'] ?? '',
+        user_name: map['review_name'] ?? '',
+        review_title: map['review_title'] ?? '',
+        review_content: map['review_content']);
+  }
+
   // Chuyển đổi thành JSON
   Map<String, dynamic> toJson() {
     return {
