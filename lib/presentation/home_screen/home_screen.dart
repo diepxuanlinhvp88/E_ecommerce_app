@@ -18,8 +18,10 @@ import '../../widgets/custom_button_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   @override
   HomeScreenState createState() => HomeScreenState();
+
   static Widget builder(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => HomeScreenProvider(),
@@ -27,11 +29,13 @@ class HomeScreen extends StatefulWidget {
     );
   }
 }
+
 class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +43,7 @@ class HomeScreenState extends State<HomeScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80.0),
         child: AppBar(
-
           backgroundColor: Colors.transparent.withOpacity(0),
-
           elevation: 0,
           centerTitle: true,
           toolbarHeight: 110.0,
@@ -62,10 +64,8 @@ class HomeScreenState extends State<HomeScreen> {
           width: double.maxFinite,
           child: CustomBottomBar(
             selectedIndex: 0,
-            onChanged: (BottomBarEnum type) {
-            },
-          )
-      ),
+            onChanged: (BottomBarEnum type) {},
+          )),
       body: SizedBox(
           width: double.maxFinite,
           child: SingleChildScrollView(
@@ -107,7 +107,7 @@ class HomeScreenState extends State<HomeScreen> {
                   Container(
                     width: double.maxFinite,
                     padding:
-                    EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.h),
+                        EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.h),
                     decoration: BoxDecoration(
                       color: appTheme.blueGray100.withOpacity(0.38),
                     ),
@@ -121,6 +121,7 @@ class HomeScreenState extends State<HomeScreen> {
           )),
     );
   }
+
   Widget _buildSearchSection(BuildContext context) {
     return Expanded(
       child: Selector<HomeScreenProvider, TextEditingController?>(
@@ -129,13 +130,14 @@ class HomeScreenState extends State<HomeScreen> {
           return CustomTextFormField(
             hintText: "Search",
             contentPadding:
-            EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
+                EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
             controller: searchController,
           );
         },
       ),
     );
   }
+
   Widget _buildBannerSection(BuildContext context) {
     return Consumer<HomeScreenProvider>(
       builder: (context, provider, child) {
@@ -143,7 +145,7 @@ class HomeScreenState extends State<HomeScreen> {
           itemCount: 2,
           itemBuilder: (context, index, realIndex) {
             BannerListItemModel model =
-            provider.homeScreenModel.bannerList[index];
+                provider.homeScreenModel.bannerList[index];
             return BannerListItemWidget(model);
           },
           options: CarouselOptions(
@@ -166,6 +168,7 @@ class HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
   Widget _buildTrendingSection(BuildContext context) {
     return Container(
       width: double.maxFinite,
@@ -220,6 +223,7 @@ class HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   Widget _buildSaleSection(BuildContext context) {
     return Container(
       width: double.maxFinite,
@@ -274,6 +278,7 @@ class HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   Widget _buildCategorySliderSection(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 4.h),
@@ -302,6 +307,7 @@ class HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   Widget _buildRecommendedProductGrid(BuildContext context) {
     return FutureBuilder<List<Product>>(
       future: HomeScreenModel().recommendedProductList(),
