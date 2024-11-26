@@ -39,7 +39,9 @@ class HomeScreenState extends State<HomeScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80.0),
         child: AppBar(
+
           backgroundColor: Colors.transparent.withOpacity(0),
+
           elevation: 0,
           centerTitle: true,
           toolbarHeight: 110.0,
@@ -54,6 +56,7 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           title: _buildSearchSection(context),
         ),
+        // title: _buildSearchSection(context),
       ),
       bottomNavigationBar: SizedBox(
           width: double.maxFinite,

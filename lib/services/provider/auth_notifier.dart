@@ -77,7 +77,7 @@ class AuthNotifier extends ChangeNotifier {
           email: email, password: password);
       User? user = res.user;
       String name = email.split('@')[0];
-      await DatabaseService(uid: user!.uid).updateUserData(email, name, 0);
+      // await DatabaseService(uid: user!.uid).updateUserData(email, name, 0);
       setLoading(false);
       success = "Register success !";
       return _userFromFirebaseUser(user);
