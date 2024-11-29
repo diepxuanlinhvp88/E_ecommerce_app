@@ -5,6 +5,7 @@ import '../data/models/selection_popup_model.dart';
 class CustomDropDown extends StatelessWidget {
   CustomDropDown({
     Key? key,
+    this.value,
     this.alignment,
     this.width,
     this.boxDecoration,
@@ -45,6 +46,7 @@ class CustomDropDown extends StatelessWidget {
   final double? iconSize;
   final List<SelectionPopupModel>? items;
   final Function(SelectionPopupModel)? onChanged;
+  final SelectionPopupModel? value;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class CustomDropDown extends StatelessWidget {
     width: width ?? double.maxFinite,
     decoration: boxDecoration,
     child: DropdownButtonFormField<SelectionPopupModel>(
+      value: value,
       focusNode: focusNode,
       icon: icon,
       iconSize: iconSize ?? 24,

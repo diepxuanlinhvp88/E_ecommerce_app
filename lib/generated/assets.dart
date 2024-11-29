@@ -64,6 +64,7 @@ class Assets {
   static const String imagesBanner2 = 'lib/assets/images/banner2.png';
   static const String imagesImgWelcomeOnboarding = 'lib/assets/images/img_welcome_onboarding.jpg';
   static const String imagesLogo = 'lib/assets/images/logo.svg';
+  static const String libAssetsData  = 'lib/assets/data .json';
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
   static const String libModelReviews = 'lib/widgets/lib/model/reviews.dart';

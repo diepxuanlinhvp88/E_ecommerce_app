@@ -4,32 +4,26 @@ import 'package:untitled/data/models/selection_popup_model.dart';
 class SignUpModel {
   List<SelectionPopupModel> nationalityList = [
     SelectionPopupModel(
-      id: 1,
       title: "Vietnam",
       isSelected: true,
     ),
     SelectionPopupModel(
-      id: 1,
       title: "England",
     ),
     SelectionPopupModel(
-      id: 1,
       title: "America",
     )
   ];
 
   List<SelectionPopupModel> genderList = [
     SelectionPopupModel(
-      id: 1,
       title: "Male",
       isSelected: true,
     ),
     SelectionPopupModel(
-      id: 1,
       title: "Female",
     ),
     SelectionPopupModel(
-      id: 1,
       title: "Others",
     )
   ];

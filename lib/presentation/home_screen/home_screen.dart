@@ -39,7 +39,8 @@ class HomeScreenState extends State<HomeScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80.0),
         child: AppBar(
-          backgroundColor: Colors.transparent.withOpacity(0),
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
           toolbarHeight: 110.0,
@@ -71,9 +72,9 @@ class HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 145.h),
+                  SizedBox(height: 150.h),
                   _buildBannerSection(context),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 24.h),
                   Container(
                     width: double.maxFinite,
                     padding: EdgeInsets.only(top: 16.h, bottom: 36.h),
@@ -91,7 +92,6 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 32.h),
                   _buildCategorySliderSection(context),
-                  // SizedBox(height: 22.h),
                   Padding(
                     padding: EdgeInsets.only(left: 16.h),
                     child: Text(
@@ -108,9 +108,7 @@ class HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       color: appTheme.blueGray100.withOpacity(0.38),
                     ),
-                    child: Column(
-                      children: [_buildRecommendedProductGrid(context)],
-                    ),
+                    child: _buildRecommendedProductGrid(context),
                   )
                 ],
               ),
@@ -316,10 +314,11 @@ class HomeScreenState extends State<HomeScreen> {
               crossAxisCount: 2,
               childAspectRatio: 0.75,
               crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              mainAxisSpacing: 10, // Giảm khoảng cách theo chiều dọc về 0
             ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero, // Đảm bảo không có padding
             itemCount: 6,
             itemBuilder: (context, index) {
               final product = relatedProducts[index];

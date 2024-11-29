@@ -16,7 +16,6 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 234.h,
         width: 175.h,
         decoration: BoxDecoration(
           color: appTheme.whiteA700,
@@ -26,64 +25,76 @@ class ProductCard extends StatelessWidget {
           children: [
             CustomImageView(
               imagePath: product.img_link,
-              height: 158.h,
+              height: 148.h,
               width: double.maxFinite,
               fit: BoxFit.contain,
             ),
-
-            SizedBox(height: 4.h),
+            const Spacer(),
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: Padding(
                 padding: EdgeInsets.only(left: 8.h),
                 child: Text(
                   product.product_name,
-                  maxLines: 2,
+                  maxLines: 2, // Giới hạn 2 dòng
+                  textAlign: TextAlign.center, // Căn giữa văn bản
+                  overflow: TextOverflow.ellipsis, // Thêm dấu "..." nếu văn bản quá dài
                   style: theme.textTheme.bodyMedium,
                 ),
               ),
             ),
-            const Spacer(),
+
             Container(
               width: double.maxFinite,
               margin: EdgeInsets.symmetric(horizontal: 8.h),
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '\$${product.actual_price.toInt()}',
-                    style: CustomTextStyles.labelLargePrimary
-                        .copyWith(fontSize: 18),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 2.h),
-                      child: Text(
-                        '\$${product.discounted_price.toInt()}',
-                        style: CustomTextStyles.labelLargePrimary.copyWith(
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: appTheme.blueGray100,
-                            color: appTheme.blueGray100,
-                            fontSize: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '\$${((product.actual_price * 0.012) * 100).round() / 100}',
+                        style: CustomTextStyles.labelLargePrimary
+                            .copyWith(fontSize: 18),
                       ),
-                    ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 2.h),
+                          child: Text(
+                            '\$${((product.discounted_price * 0.012) * 100).round() / 100}',
+                            style: CustomTextStyles.labelLargePrimary.copyWith(
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: appTheme.blueGray100,
+                                color: appTheme.blueGray100,
+                                fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const Spacer(),
-                  Text(
-                    '${product.rating}',
-                    style: TextStyle(fontSize: 10, color: appTheme.orangeA200),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(left: 2.h),
-                      child: CustomRatingBar(
-                        ignoreGestures: true,
-                        initialRating: product.rating,
-                        color: appTheme.orangeA200,
-                      )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${product.rating}',
+                        style: TextStyle(fontSize: 10, color: appTheme.orangeA200),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(left: 2.h),
+                          child: CustomRatingBar(
+                            ignoreGestures: true,
+                            initialRating: product.rating,
+                            color: appTheme.orangeA200,
+                          )
+                      ),
+                    ],
+                  )
                 ],
               ),
-            )
+            ),
+            SizedBox(height: 4.h),
           ],
         ));
   }

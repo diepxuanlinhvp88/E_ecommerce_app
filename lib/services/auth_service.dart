@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:untitled/data/models/user_model.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class AuthService extends ChangeNotifier {
   // Singleton pattern
@@ -9,6 +10,7 @@ class AuthService extends ChangeNotifier {
   AuthService._internal();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   // Stream to listen to authentication state changes
   Stream<User?> get authStateChanges => _auth.authStateChanges();
@@ -69,6 +71,11 @@ class AuthService extends ChangeNotifier {
         email: email,
         password: password,
       );
+
+      await _database.child('users').child(credential.user!.uid).set(
+          userModel.toJson()
+      );
+
       return credential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
