@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/core/app_export.dart';
 import 'package:untitled/model/Product.dart';
+import 'package:untitled/services/Database/DatabaseService.dart';
 import 'package:untitled/services/product_service.dart';
 import 'package:untitled/theme/custom_text_style.dart';
 import 'package:untitled/widgets/custom_elevated_button.dart';
@@ -22,18 +23,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool isExpandedReviews = false;
 
   late Future<List<Product>> futureRelatedProducts;
-  late Future<List<Product>> jsonProduct;
+  // late Future<List<Product>> jsonProduct;
+  late Future<List<Product>> firestoreProductList;
 
   @override
   void initState() {
     super.initState();
     // Giả sử bạn lấy dữ liệu sản phẩm liên quan từ Firestore hoặc API
 
-    jsonProduct = ProductService().loadProductsFromJson();
+    // jsonProduct = ProductService().loadProductsFromJson();
+    firestoreProductList = DatabaseService().fetchAllProducts();
   }
 
   Future<List<Product>> fetchRelatedProducts() async {
-    final products = await jsonProduct;
+    final products = await firestoreProductList;
     return products.take(20).toList();
   }
 
@@ -57,12 +60,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: LightCodeColors().deepPurpleA200,
         elevation: 1,
         leading: IconButton(
+
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.homeScreen)
         ),
+
         title: Container(
           height: 40,
           decoration: BoxDecoration(
@@ -90,24 +95,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   imagePath: widget.product.img_link,
                 )),
 
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Price and Discount
-                  Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Price and Discount
+                Container(
+                  color: LightCodeColors().deepPurpleA200,
+                  height: 60.h,
+                  child: Row(
                     children: [
+                      SizedBox(width: 18.h,),
                       Text('\$ ${widget.product.discounted_price}',
                           style: CustomTextStyles.labelLargePrimary.copyWith(
-                              fontSize: 14.h,
+                              fontSize: 20.h,
                               color: LightCodeColors().orangeA200)),
                       const SizedBox(width: 8),
                       Text(
                         '\$ ${widget.product.actual_price}',
                         style: TextStyle(
                           decoration: TextDecoration.lineThrough,
-                          color: Colors.grey[600],
+                          color: Colors.white,
+                          fontSize: 20.h
                         ),
                       ),
                       const Spacer(),
@@ -127,6 +135,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ],
                   ),
+                ),
+              ],
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   const SizedBox(height: 8),
 
                   // Product Title and Rating
@@ -374,7 +391,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           CircleAvatar(
-            child: Text(review.user_name[0].toUpperCase()),
+            child: Text('N'.toUpperCase()),
           ),
           SizedBox(
             width: 12,
