@@ -6,7 +6,7 @@ import 'package:untitled/presentation/detail_screen/detail_screen.dart';
 import 'package:untitled/presentation/home_screen/models/banner_list_item_model.dart';
 import 'package:untitled/presentation/home_screen/models/home_screen_model.dart';
 import '../../core/app_export.dart';
-import '../../model/Product.dart';
+import '../../model/product.dart';
 import '../../widgets/custom_text_form_field.dart';
 import 'widgets/banner_list_item_widget.dart';
 import 'widgets/product_slider_list_item_widget.dart';

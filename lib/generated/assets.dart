@@ -32,7 +32,7 @@ class Assets {
   static const String componentsProductTitleWithImage = 'lib/screen/details/components/product_title_with_image.dart';
   static const String componentsSizeProduct = 'lib/screen/details/components/size_product.dart';
   static const String coreAppExport = 'lib/core/app_export.dart';
-  static const String databaseDatabaseService = 'lib/services/Database/DatabaseService.dart';
+  static const String databaseDatabaseService = 'lib/services/Database/product_service.dart';
   static const String detailScreenDetailScreen = 'lib/presentation/detail_screen/detail_screen.dart';
   static const String detailUpdateDetail = 'lib/screen/detail_update/detail.dart';
   static const String detailUpdateStartRating = 'lib/screen/detail_update/start_rating.dart';
@@ -68,7 +68,7 @@ class Assets {
   static const String libMain = 'lib/main.dart';
   static const String libModelReviews = 'lib/widgets/lib/model/reviews.dart';
   static const String modelCountQuantity = 'lib/presentation/detail_screen/model/count_quantity.dart';
-  static const String modelProduct = 'lib/model/Product.dart';
+  static const String modelProduct = 'lib/model/product.dart';
   static const String modelReviews = 'lib/model/reviews.dart';
   static const String modelStartRating = 'lib/presentation/detail_screen/model/start_rating.dart';
   static const String modelUser = 'lib/model/user.dart';

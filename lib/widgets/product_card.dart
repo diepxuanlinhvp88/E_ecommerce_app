@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/core/app_export.dart';
-import 'package:untitled/model/Product.dart';
+import 'package:untitled/model/product.dart';
 import 'package:untitled/model/reviews.dart';
 import 'custom_rating_bar.dart';
 import 'package:untitled/widgets/lib/model/reviews.dart';

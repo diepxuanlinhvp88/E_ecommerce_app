@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/model/Product.dart';
+import 'package:untitled/model/product.dart';
 import 'package:untitled/screen/detail_update/start_rating.dart';
 
 class ProductDetailScreen extends StatefulWidget {

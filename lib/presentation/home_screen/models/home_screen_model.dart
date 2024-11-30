@@ -1,18 +1,18 @@
 import 'dart:async';
 
 import 'package:untitled/core/app_export.dart';
-import 'package:untitled/model/Product.dart';
+import 'package:untitled/model/product.dart';
 import 'package:untitled/services/product_service.dart';
-import '../../../model/Product.dart';
-import '../../../services/Database/DatabaseService.dart';
+import '../../../model/product.dart';
+import '../../../services/Database/product_service.dart';
 import 'banner_list_item_model.dart';
 import 'category_list_item_model.dart';
 
 class HomeScreenModel {
-  final DatabaseService databaseService = DatabaseService();
+  final ProductService productService = ProductService();
 
   Future<List<Product>> getAllProductFirestore() async {
-    final productList = await databaseService.fetchAllProducts();
+    final productList = await productService.fetchAllProducts();
     return productList;
   }
 
@@ -22,26 +22,16 @@ class HomeScreenModel {
   ];
 
   Future<List<Product>> getTrendingProductList() async {
-    if (getAllProductFirestore() != null) {
-      final productList = await databaseService.fetchAllProducts();
-      return productList.take(5).toList();
-    }
-
-    return [];
+    return productService.getTrendingProducts();
   }
 
   Future<List<Product>> getSaleProductList() async {
-    if (getAllProductFirestore() != null) {
-      final productList = await databaseService.fetchAllProducts();
-      return productList.take(5).toList();
-    }
-
-    return [];
+    return productService.getSaleProductList();
   }
 
   Future<List<Product>> recommendedProductList() async {
     if (getAllProductFirestore() != null) {
-      final productList = await databaseService.fetchAllProducts();
+      final productList = await productService.fetchAllProducts();
       return productList.take(6).toList();
     }
 

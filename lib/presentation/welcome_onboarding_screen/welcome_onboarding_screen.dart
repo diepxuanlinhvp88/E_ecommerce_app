@@ -148,6 +148,7 @@ class WelcomeOnboardingScreen extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
+                                // AuthService().signInAnonymous();
                                 Navigator.pushNamed(context, AppRoutes.homeScreen);
                               },
                             ),

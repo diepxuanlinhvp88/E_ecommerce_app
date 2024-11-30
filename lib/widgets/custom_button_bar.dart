@@ -49,9 +49,9 @@ class CustomBottomBarState extends State<CustomBottomBar> {
       case BottomBarEnum.Home:
         return AppRoutes.homeScreen;
       case BottomBarEnum.Cart:
-        return "";
+        return AppRoutes.cartScreen;
       case BottomBarEnum.Account:
-        return "";
+        return AppRoutes.profileScreen;
       case BottomBarEnum.Menu:
         return "";
       default:

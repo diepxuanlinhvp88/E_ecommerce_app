@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../model/Product.dart';
+import '../../../model/product.dart';
 import '../../../shared/constants.dart';
 class ProductTitleWithImage extends StatelessWidget {
 

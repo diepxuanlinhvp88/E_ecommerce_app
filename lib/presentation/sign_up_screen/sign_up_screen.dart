@@ -2,14 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/data/models/selection_popup_model.dart';
+import 'package:untitled/model/user.dart';
+import 'package:untitled/services/Database/user_service.dart';
 import 'package:untitled/widgets/custom_drop_down.dart';
 import '../../core/app_export.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/custom_text_form_field.dart';
 import 'models/sign_up_model.dart';
-import 'package:untitled/data/models/user_model.dart';
-
-// import '../models/user_model.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -22,9 +21,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
   final String _selectedNationality = 'Vietnam';
   final String _selectedGender = 'Male';
@@ -38,13 +39,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _firstNameController.dispose();
-    _lastNameController.dispose();
+    _nameController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+
     super.dispose();
   }
 
   Future<void> _submit() async {
-
     if (!_formKey.currentState!.validate()) return;
     if (!_acceptedTerms || !_acceptedMarketing) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -55,25 +57,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     final authProvider = Provider.of<AuthService>(context, listen: false);
 
-    final userModel = UserModel(
-      firstName: _firstNameController.text,
-      lastName: _lastNameController.text,
-      email: _emailController.text,
-      nationality: _selectedNationality,
-      gender: _selectedGender,
-      acceptedTerms: _acceptedTerms,
-      acceptedMarketing: _acceptedMarketing,
-    );
-
     try {
       final UserCredential? userCredential = await authProvider.signUp(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
-        userModel: userModel,
       );
+      final userModel = CustomUser(
+          uid: userCredential!.user!.uid,
+          name: _nameController.text,
+          email: _emailController.text,
+          pass: _passwordController.text,
+          nationality: _selectedNationality,
+          gender: _selectedGender,
+          address: _addressController.text,
+          phone: _phoneController.text,
+          isSeller: false);
 
       if (userCredential != null && userCredential.user != null) {
         print("Signup successful!");
+        ProfileService().createUserProfile(userModel);
         Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen);
       } else {
         throw Exception("Signup failed");
@@ -83,7 +85,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         SnackBar(content: Text(e.toString())),
       );
     }
-
   }
 
   @override
@@ -110,52 +111,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 SizedBox(height: 10.h),
-                Text(
-                    'Join us for a better shopping experience!',
-                    style: theme.textTheme.bodyMedium
-                )
+                Text('Join us for a better shopping experience!',
+                    style: theme.textTheme.bodyMedium)
               ],
             ),
           ),
         ),
       ),
-      body: Consumer<AuthService>(
-        builder: (context, authProvider, child) {
-          if (authProvider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: SizedBox(
+        child: SingleChildScrollView(
+          child: Consumer<AuthService>(
+            builder: (context, authProvider, child) {
+              if (authProvider.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          return SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'PERSONAL INFORMATION',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 18.h),
-                    Text(
-                      '*Please use English character only',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    SizedBox(height: 18.h),
-
-                    // Nationality and Gender dropdowns
-                    Row(
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                            child: Column(
+                        Text(
+                          'PERSONAL INFORMATION',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 18.h),
+                        Text(
+                          '*Please use English character only',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        SizedBox(height: 18.h),
+
+                        // Nationality and Gender dropdowns
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
@@ -176,10 +177,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                 )
                               ],
-                            )
-                        ),
-                        Expanded(
-                            child: Column(
+                            )),
+                            Expanded(
+                                child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
@@ -200,21 +200,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                 )
                               ],
-                            )
+                            )),
+                          ],
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 14.h),
+                        SizedBox(height: 14.h),
 
-                    // First and Last Name
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Column(
+                        //Address and Role
+
+                        SizedBox(
+                          height: 14.h,
+                        ),
+
+                        // First and Last Name
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "First name*",
+                                  "Name*",
                                   style: theme.textTheme.bodyMedium,
                                 ),
                                 SizedBox(height: 2.h),
@@ -223,215 +228,302 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     child: CustomTextFormField(
                                       hintText: "John",
                                       contentPadding: EdgeInsets.all(10.h),
-                                      controller: _firstNameController,
+                                      controller: _nameController,
                                       validator: (value) {
                                         if (value?.isEmpty ?? true) {
-                                          return 'Please enter your first name';
+                                          return 'Please enter your name';
                                         }
                                         return null;
                                       },
-                                    )
-                                )
+                                    ))
                               ],
-                            )
+                            )),
+                            // SizedBox(width: 14.h),
+                            // Expanded(
+                            //     child: Column(
+                            //       crossAxisAlignment: CrossAxisAlignment.start,
+                            //       children: [
+                            //         Text(
+                            //           "Last name*",
+                            //           style: theme.textTheme.bodyMedium,
+                            //         ),
+                            //         SizedBox(height: 2.h),
+                            //         Padding(
+                            //             padding: EdgeInsets.only(right: 8.h),
+                            //             child: CustomTextFormField(
+                            //               hintText: "Doe",
+                            //               contentPadding: EdgeInsets.all(10.h),
+                            //               controller: _nameController,
+                            //               validator: (value) {
+                            //                 if (value?.isEmpty ?? true) {
+                            //                   return 'Please enter your first name';
+                            //                 }
+                            //                 return null;
+                            //               },
+                            //             )
+                            //         )
+                            //       ],
+                            //     )
+                            // ),
+                          ],
                         ),
-                        SizedBox(width: 14.h),
-                        Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "First name*",
-                                  style: theme.textTheme.bodyMedium,
+                        SizedBox(height: 14.h),
+                        SizedBox(
+                          width: double.maxFinite,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'E-mail*',
+                                style: theme.textTheme.bodyMedium,
+                              ),
+                              SizedBox(height: 2.h),
+                              CustomTextFormField(
+                                controller: _emailController,
+                                hintText: "Please enter your email",
+                                textInputType: TextInputType.emailAddress,
+                                contentPadding: EdgeInsets.all(10.h),
+                                validator: (value) {
+                                  if (value?.isEmpty ?? true) {
+                                    return 'Please enter your email';
+                                  }
+                                  if (!value!.contains('@')) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 14,
+                        ),
+                        SizedBox(
+                          width: double.maxFinite,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Phone*',
+                                style: theme.textTheme.bodyMedium,
+                              ),
+                              SizedBox(height: 2.h),
+                              CustomTextFormField(
+                                controller: _phoneController,
+                                hintText: "Please enter your phone",
+                                textInputType: TextInputType.phone,
+                                contentPadding: EdgeInsets.all(10.h),
+                                validator: (value) {
+                                  if (value?.isEmpty ?? true) {
+                                    return 'Please enter your phone';
+                                  }
+
+                                  return null;
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+
+                        SizedBox(height: 14.h),
+
+                        SizedBox(
+                          width: double.maxFinite,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Password*',
+                                style: theme.textTheme.bodyMedium,
+                              ),
+                              SizedBox(height: 2.h),
+                              CustomTextFormField(
+                                controller: _passwordController,
+                                hintText: "Please enter your password",
+                                suffix: IconButton(
+                                  icon: Icon(
+                                    _obscurePassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
                                 ),
-                                SizedBox(height: 2.h),
-                                Padding(
-                                    padding: EdgeInsets.only(right: 8.h),
-                                    child: CustomTextFormField(
-                                      hintText: "Doe",
-                                      contentPadding: EdgeInsets.all(10.h),
-                                      controller: _lastNameController,
-                                      validator: (value) {
-                                        if (value?.isEmpty ?? true) {
-                                          return 'Please enter your first name';
-                                        }
-                                        return null;
-                                      },
-                                    )
-                                )
-                              ],
-                            )
+                                suffixConstraints:
+                                    BoxConstraints(maxHeight: 40.h),
+                                contentPadding: EdgeInsets.all(10.h),
+                                obscureText: _obscurePassword,
+                                validator: (value) {
+                                  if (value?.isEmpty ?? true) {
+                                    return 'Please enter a password';
+                                  }
+                                  if (value!.length < 6) {
+                                    return 'Password must be at least 6 characters';
+                                  }
+                                  return null;
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 14.h),
+
+                        SizedBox(
+                          width: double.maxFinite,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Password*',
+                                style: theme.textTheme.bodyMedium,
+                              ),
+                              SizedBox(height: 2.h),
+                              CustomTextFormField(
+                                controller: _confirmPasswordController,
+                                hintText: "Please re-enter your password",
+                                suffix: IconButton(
+                                  icon: Icon(
+                                    _obscureConfirmPassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscureConfirmPassword =
+                                          !_obscureConfirmPassword;
+                                    });
+                                  },
+                                ),
+                                suffixConstraints:
+                                    BoxConstraints(maxHeight: 40.h),
+                                contentPadding: EdgeInsets.all(10.h),
+                                obscureText: _obscureConfirmPassword,
+                                validator: (value) {
+                                  if (value?.isEmpty ?? true) {
+                                    return 'Please confirm your password';
+                                  }
+                                  if (value != _passwordController.text) {
+                                    return 'Passwords do not match';
+                                  }
+                                  return null;
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 14.h),
+
+                        //address
+                        SizedBox(
+                          width: double.maxFinite,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Address*',
+                                style: theme.textTheme.bodyMedium,
+                              ),
+                              SizedBox(height: 2.h),
+                              CustomTextFormField(
+                                controller: _addressController,
+                                hintText: "Please enter your address",
+                                textInputType: TextInputType.phone,
+                                contentPadding: EdgeInsets.all(10.h),
+                                validator: (value) {
+                                  if (value?.isEmpty ?? true) {
+                                    return 'Please enter your address';
+                                  }
+
+                                  return null;
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+
+                        //Role
+                        SizedBox(
+                          width: double.maxFinite,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Role*',
+                                style: theme.textTheme.bodyMedium,
+                              ),
+                              SizedBox(height: 2.h),
+                              CustomTextFormField(
+                                hintText: "Buyer/ Seller",
+                                textInputType: TextInputType.phone,
+                                contentPadding: EdgeInsets.all(10.h),
+                                validator: (value) {
+                                  if (value?.isEmpty ?? true) {
+                                    return 'Please enter your address';
+                                  }
+
+                                  return null;
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+
+                        // Checkboxes
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(
+                            'I hereby read and accepted the Terms & Conditions of GlobalCard App',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          value: _acceptedTerms,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _acceptedTerms = value ?? false;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(
+                            'I agree to receive information about promotions and marketing e-mails from GlobalCart and partners',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          value: _acceptedMarketing,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _acceptedMarketing = value ?? false;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                        SizedBox(height: 16),
+                        SizedBox(
+                          child: CustomElevatedButton(
+                            onPressed: _submit,
+                            text: 'Submit',
+                            height: 50.h,
+                            buttonStyle: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 14.h),
-                    SizedBox(
-                      width: double.maxFinite,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'E-mail*',
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                          SizedBox(height: 2.h),
-                          CustomTextFormField(
-                            controller: _emailController,
-                            hintText: "Please enter your email",
-                            textInputType: TextInputType.emailAddress,
-                            contentPadding: EdgeInsets.all(10.h),
-                            validator: (value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Please enter your email';
-                              }
-                              if (!value!.contains('@')) {
-                                return 'Please enter a valid email';
-                              }
-                              return null;
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 14.h),
-
-                    SizedBox(
-                      width: double.maxFinite,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Password*',
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                          SizedBox(height: 2.h),
-                          CustomTextFormField(
-                            controller: _passwordController,
-                            hintText: "Please enter your password",
-                            suffix: IconButton(
-                              icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscurePassword = !_obscurePassword;
-                                });
-                              },
-                            ),
-                            suffixConstraints: BoxConstraints(maxHeight: 40.h),
-                            contentPadding: EdgeInsets.all(10.h),
-                            obscureText: _obscurePassword,
-                            validator: (value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Please enter a password';
-                              }
-                              if (value!.length < 6) {
-                                return 'Password must be at least 6 characters';
-                              }
-                              return null;
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 14.h),
-
-                    SizedBox(
-                      width: double.maxFinite,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Password*',
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                          SizedBox(height: 2.h),
-                          CustomTextFormField(
-                            controller: _confirmPasswordController,
-                            hintText: "Please re-enter your password",
-                            suffix: IconButton(
-                              icon: Icon(
-                                _obscureConfirmPassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscureConfirmPassword = !_obscureConfirmPassword;
-                                });
-                              },
-                            ),
-                            suffixConstraints: BoxConstraints(maxHeight: 40.h),
-                            contentPadding: EdgeInsets.all(10.h),
-                            obscureText: _obscureConfirmPassword,
-                            validator: (value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Please confirm your password';
-                              }
-                              if (value != _passwordController.text) {
-                                return 'Passwords do not match';
-                              }
-                              return null;
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 14.h),
-
-                    // Checkboxes
-                    CheckboxListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(
-                        'I hereby read and accepted the Terms & Conditions of GlobalCard App',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      value: _acceptedTerms,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _acceptedTerms = value ?? false;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.leading,
-                    ),
-                    CheckboxListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(
-                        'I agree to receive information about promotions and marketing e-mails from GlobalCart and partners',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      value: _acceptedMarketing,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _acceptedMarketing = value ?? false;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.leading,
-                    ),
-                    SizedBox(height: 16),
-                    SizedBox(
-                      child: CustomElevatedButton(
-                        onPressed: _submit,
-                        text: 'Submit',
-                        height: 50.h,
-                        buttonStyle: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }
