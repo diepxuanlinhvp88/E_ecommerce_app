@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../model/Product.dart';
+import '../../../model/product.dart';
 import '../../../shared/constants.dart';
 
 class ItemCard extends StatelessWidget {
@@ -26,20 +26,20 @@ class ItemCard extends StatelessWidget {
                 height: 180,
                 width: 160,
                 decoration: BoxDecoration(
-                  color: product!.color,
+                  color: Color(0xFF8C68EE),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Hero(tag: "${product.id}",child: Image.asset(product!.image))),
+                child: Hero(tag: "${product.product_id}",child: Image.network(product!.img_link))),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: kDefaultPaddin / 4),
             child: Text(
-              product!.title,
+              product!.product_name,
               style: TextStyle(color: kTextLightColor),
             ),
           ),
           Text(
-            "\$${product!.price}",
+            "\$${product!.actual_price}",
             style: TextStyle(fontWeight: FontWeight.bold),
           )
         ],

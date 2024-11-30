@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../model/Product.dart';
+import '../../../model/product.dart';
 import '../../../shared/constants.dart';
 
 class sizeProduct extends StatelessWidget {
@@ -28,7 +28,7 @@ class sizeProduct extends StatelessWidget {
                     children: [
                   TextSpan(text: "Size\n"),
                   TextSpan(
-                      text: "${product.size} cm",
+                      text: "${product.rating} cm",
                       style: Theme.of(context)
                           .textTheme
                           .headlineSmall!

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:untitled/model/Product.dart';
+import 'package:untitled/model/product.dart';
 import 'package:untitled/screen/details/components/body.dart';
 import 'package:untitled/shared/constants.dart';
 
@@ -14,9 +14,9 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: product.color,
+      backgroundColor: Color(0xFF8C68EE),
       appBar: AppBar(
-        backgroundColor: product.color,
+        backgroundColor: Color(0xFF8C68EE),
         elevation: 0,
         leading: IconButton(
           icon: SvgPicture.asset(

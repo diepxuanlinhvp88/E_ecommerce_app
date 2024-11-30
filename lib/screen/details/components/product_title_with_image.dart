@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../model/Product.dart';
+import '../../../model/product.dart';
 import '../../../shared/constants.dart';
 class ProductTitleWithImage extends StatelessWidget {
 
@@ -24,7 +24,7 @@ class ProductTitleWithImage extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
           Text(
-            product.title,
+            product.product_name,
             style: Theme.of(context)
                 .textTheme
                 .headlineMedium
@@ -41,7 +41,7 @@ class ProductTitleWithImage extends StatelessWidget {
                   text: TextSpan(children: [
                     TextSpan(text: "price\n"),
                     TextSpan(
-                        text: "\$${product.price}",
+                        text: "\$${product.actual_price}",
                         style: Theme.of(context)
                             .textTheme
                             .headlineMedium!
@@ -54,9 +54,9 @@ class ProductTitleWithImage extends StatelessWidget {
               ),
               Expanded(
                 child: Hero(
-                  tag: "${product.id}",
+                  tag: "${product.product_id}",
                   child: Image.asset(
-                    product.image,
+                    product.img_link,
                     fit: BoxFit.fill,
                   ),
                 ),

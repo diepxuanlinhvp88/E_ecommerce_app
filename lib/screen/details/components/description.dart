@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../model/Product.dart';
+import '../../../model/product.dart';
 import '../../../shared/constants.dart';
 
 class Description extends StatelessWidget {
@@ -16,7 +16,7 @@ class Description extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(kDefaultPaddin),
       child: Text(
-        product.description,
+        product.about_product,
         style: TextStyle(height: 1.5,
         ),
       ),
