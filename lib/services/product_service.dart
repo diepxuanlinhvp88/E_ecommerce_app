@@ -2,7 +2,7 @@
 // import 'dart:convert';
 // import 'package:flutter/services.dart';
 //
-// import '../model/Product.dart';
+// import '../model/product.dart';
 //
 // class ProductService {
 //   Future<List<Product>> loadProductsFromJson() async {

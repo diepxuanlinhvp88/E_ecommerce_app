@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/core/app_export.dart';
-import 'package:untitled/model/Product.dart';
-import 'package:untitled/services/Database/DatabaseService.dart';
+import 'package:untitled/model/product.dart';
+import 'package:untitled/services/Database/cart_service.dart';
+import 'package:untitled/services/Database/product_service.dart';
 import 'package:untitled/services/product_service.dart';
 import 'package:untitled/theme/custom_text_style.dart';
 import 'package:untitled/widgets/custom_elevated_button.dart';
@@ -14,6 +15,7 @@ class ProductDetailScreen extends StatefulWidget {
 
   final Product product;
 
+
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
@@ -25,6 +27,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late Future<List<Product>> futureRelatedProducts;
   // late Future<List<Product>> jsonProduct;
   late Future<List<Product>> firestoreProductList;
+  late CartService cartService;
+  var userId;
+
 
   @override
   void initState() {
@@ -32,7 +37,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     // Giả sử bạn lấy dữ liệu sản phẩm liên quan từ Firestore hoặc API
 
     // jsonProduct = ProductService().loadProductsFromJson();
-    firestoreProductList = DatabaseService().fetchAllProducts();
+    firestoreProductList = ProductService().fetchAllProducts();
+    userId = AuthService().getCurrentUser()?.uid;
+    // userId = 'hcVXheLM9Jc0uSuHszIl27v3ugj1';
+    cartService = CartService();
+
   }
 
   Future<List<Product>> fetchRelatedProducts() async {
@@ -74,7 +83,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: const TextField(
+          child: TextField(
             decoration: InputDecoration(
               hintText: 'Search',
               prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -83,6 +92,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ),
         ),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.pushNamed(context, AppRoutes.cartScreen);
+
+          }, icon: Icon(Icons.shopping_cart))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -230,7 +245,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       Expanded(
                           child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          print(userId);
+                          cartService.addToCart(widget.product, userId, quantity);
+
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: LightCodeColors().deepPurpleA200,
                           minimumSize: Size(3.h, 60.h),
@@ -374,7 +393,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ),
         Column(
           children: List.generate(
-            isExpandedReviews ? widget.product.reviews.length : 3,
+
+            isExpandedReviews ? (widget.product.reviews.length ) : (widget.product.reviews.length > 0 ? 1 : 0 ) ,
             (index) {
               final review = widget.product.reviews[index];
               return _buildReviewItem(review);

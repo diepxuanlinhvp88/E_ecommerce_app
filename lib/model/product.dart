@@ -10,9 +10,11 @@ class Product {
       product_name,
       about_product,
       product_link,
-      discount_percentage;
+      discount_percentage,
+      seller_id;
+
   final double actual_price, rating, discounted_price;
-  final int rating_count;
+  final int rating_count, stock;
   final String user_id, img_link;
 
   final List<Review> reviews;
@@ -33,6 +35,8 @@ class Product {
     required this.img_link,
     required this.product_link,
     required this.reviews,
+    required this.seller_id,
+    required this.stock
   });
 
   factory Product.fromJson(Map<String, dynamic> datajson) {
@@ -52,14 +56,17 @@ class Product {
           .map((reviewJson) => Review.fromJson(reviewJson))
           .toList(),
       category: datajson['category'],
+      seller_id: 'sellerAll',
+      stock: 100
     );
   }
 
   factory Product.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     final List<Review> reviews = (data['reviews'] as List<dynamic>?)
-        ?.map((item) => Review.fromMap(item as Map<String, dynamic>))
-        .toList() ?? [];
+            ?.map((item) => Review.fromMap(item as Map<String, dynamic>))
+            .toList() ??
+        [];
     return Product(
         discount_percentage: data['discount_percentage'],
         discounted_price: data['discounted_price'],
@@ -73,10 +80,13 @@ class Product {
         user_id: doc.id,
         img_link: data['img_link'],
         product_link: data['product_link'],
-        reviews: reviews);
+        reviews: reviews,
+      seller_id: data['seller_id'],
+      stock: data['stock']
+    );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'product_id': product_id,
       'product_name': product_name,
@@ -87,8 +97,10 @@ class Product {
       'rating_count': rating_count,
       'about_product': about_product,
       'discount_percentage': discount_percentage,
-      'reviews': reviews.map((review) => review.toJson()).toList(),
+      'reviews': reviews.map((review) => review.toMap()).toList(),
       'category': category,
+      'seller_id': seller_id,
+      'stock': stock
     };
   }
 }
@@ -107,3 +119,4 @@ Future<List<Product>> loadJsonFromAssets() async {
     return [];
   }
 }
+

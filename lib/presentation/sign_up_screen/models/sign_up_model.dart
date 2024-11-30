@@ -9,11 +9,11 @@ class SignUpModel {
       isSelected: true,
     ),
     SelectionPopupModel(
-      id: 1,
+      id: 2,
       title: "England",
     ),
     SelectionPopupModel(
-      id: 1,
+      id: 3,
       title: "America",
     )
   ];
@@ -25,12 +25,41 @@ class SignUpModel {
       isSelected: true,
     ),
     SelectionPopupModel(
-      id: 1,
+      id: 2,
       title: "Female",
     ),
     SelectionPopupModel(
-      id: 1,
+      id: 3,
       title: "Others",
+    )
+  ];
+
+  List<SelectionPopupModel> isSeller = [
+    SelectionPopupModel(
+      id: 1,
+      title: "Seller",
+      isSelected: true,
+    ),
+    SelectionPopupModel(
+      id: 1,
+      title: "Buyer",
+    ),
+
+  ];
+
+  List<SelectionPopupModel> address = [
+    SelectionPopupModel(
+      id: 1,
+      title: "Ha Noi",
+      isSelected: true,
+    ),
+    SelectionPopupModel(
+      id: 1,
+      title: "Ho Chi Minh",
+    ),
+    SelectionPopupModel(
+      id: 1,
+      title: "Da Nang",
     )
   ];
 

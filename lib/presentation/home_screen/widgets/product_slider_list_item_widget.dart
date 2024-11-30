@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/core/app_export.dart';
-import 'package:untitled/model/Product.dart';
+import 'package:untitled/model/product.dart';
 
 class ProductSliderListItemWidget extends StatelessWidget {
   ProductSliderListItemWidget(this.product, {super.key});

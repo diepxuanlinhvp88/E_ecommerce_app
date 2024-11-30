@@ -30,7 +30,7 @@ class Review {
   }
 
   // Chuyển đổi thành JSON
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'review_id': review_id,
       'review_title': review_title,
