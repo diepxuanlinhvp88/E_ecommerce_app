@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/app_export.dart';
@@ -257,24 +258,24 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _signIn(AuthService authService) async {
     if (!_formKey.currentState!.validate()) {
-      return; // Stop if form is invalid
+      return;
     }
-
     try {
-      final bool success = (await authService.signIn(
+      final UserCredential userCredential = await authService.signIn(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
-      )) as bool;
+      );
 
-      if (success && mounted) {
+      if (userCredential.user != null && mounted) {
         Navigator.pushNamed(context, AppRoutes.homeScreen);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(content: Text('${e.toString()}')),
       );
     }
   }
+
 
   @override
   void dispose() {

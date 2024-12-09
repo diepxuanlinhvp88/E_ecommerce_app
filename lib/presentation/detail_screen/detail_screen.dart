@@ -28,18 +28,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   // late Future<List<Product>> jsonProduct;
   late Future<List<Product>> firestoreProductList;
   late CartService cartService;
-  var userId;
+  var userId = '';
 
 
   @override
   void initState() {
     super.initState();
-    // Giả sử bạn lấy dữ liệu sản phẩm liên quan từ Firestore hoặc API
+
 
     // jsonProduct = ProductService().loadProductsFromJson();
     firestoreProductList = ProductService().fetchAllProducts();
-    userId = AuthService().getCurrentUser()?.uid;
-    // userId = 'hcVXheLM9Jc0uSuHszIl27v3ugj1';
+    userId = AuthService().getCurrentUser()!.uid;
+    // userId = 'NOlPPPEdwEhXEfi8IBGLHFOgl9k1';
     cartService = CartService();
 
   }

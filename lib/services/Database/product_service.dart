@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:untitled/model/Cart/cart_item.dart';
+import 'package:untitled/widgets/product_card.dart';
 
 import '../../firebase_options.dart';
 import '../../model/product.dart';
@@ -104,6 +106,8 @@ class ProductService {
       return [];
     }
   }
+  ///sản phẩm tìm kiếm
+
 }
 
 Future<void> main() async {

@@ -28,8 +28,10 @@ class CustomTextFormField extends StatelessWidget {
   final bool filled;
   final String? Function(String?)? validator;
 
+
   const CustomTextFormField({
     Key? key,
+
     this.alignment,
     this.width,
     this.boxDecoration,

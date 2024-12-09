@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/core/app_export.dart';
 import 'package:untitled/model/user.dart';
+import 'package:untitled/presentation/orders_screen/my_order_screen.dart';
 import 'package:untitled/services/Database/user_service.dart';
 import 'package:untitled/widgets/custom_elevated_button.dart';
 
@@ -56,6 +57,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   'https://m.media-amazon.com/images/I/41V5FtEWPkL._SX300_SY300_QL70_FMwebp_.jpg'),
             ),
             SizedBox(height: 16),
+            CustomElevatedButton(text: 'Myorder', onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> MyOrderScreen()));
+            },),
             _buildProfileField(
               'Name',
               userProfile.name!,
@@ -71,11 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               userProfile.phone!,
               (value) => userProfile.phone = value,
             ),
-            _buildProfileField(
-              'Address',
-              userProfile.address!,
-              (value) => userProfile.address = value,
-            ),
+
             _buildRoleField(),
             CustomElevatedButton(
                 text: userProfile.isSeller! ? 'View store' : 'Create store',
