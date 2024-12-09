@@ -127,16 +127,74 @@ class HomeScreenState extends State<HomeScreen> {
       child: Selector<HomeScreenProvider, TextEditingController?>(
         selector: (context, provider) => provider.searchController,
         builder: (context, searchController, child) {
-          return CustomTextFormField(
-            hintText: "Search",
-            contentPadding:
+          return Column(
+            children: [
+              CustomTextFormField(
+                hintText: "Search",
+                contentPadding:
                 EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
-            controller: searchController,
+                controller: searchController,
+                onTap: () {
+                  // Clear search query
+                  searchController?.clear();
+                },
+
+
+                // onChanged: (value) {
+                //   // Trigger provider to filter suggestions
+                //   context.read<HomeScreenProvider>().filterSuggestions(value);
+                // },
+              ),
+              // Display suggestions
+              Consumer<HomeScreenProvider>(
+                builder: (context, provider, child) {
+                  if (provider.filteredSuggestions.isEmpty) {
+                    return const SizedBox(); // No suggestions
+                  }
+                  return Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12.h),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.h),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: provider.filteredSuggestions.length,
+                      itemBuilder: (context, index) {
+                        final suggestion = provider.filteredSuggestions[index];
+                        return ListTile(
+                          title: Text(suggestion.product_name), // Product name
+                          onTap: () {
+                            // Navigate to product detail or perform search
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductDetailScreen(product: suggestion),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ],
           );
         },
       ),
     );
   }
+
 
   Widget _buildBannerSection(BuildContext context) {
     return Consumer<HomeScreenProvider>(

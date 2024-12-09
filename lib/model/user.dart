@@ -1,3 +1,5 @@
+import 'package:untitled/model/address_model.dart';
+
 class CustomUser {
   final String? uid;
   String? name;
@@ -5,7 +7,7 @@ class CustomUser {
   String? pass;
   String? phone;
   bool? isSeller;
-  String? address;
+  String? addressId;
   String? avatar_link =
       'https://m.media-amazon.com/images/I/41V5FtEWPkL._SX300_SY300_QL70_FMwebp_.jpg';
   String? bio;
@@ -21,7 +23,7 @@ class CustomUser {
     this.pass,
     this.phone,
     this.isSeller,
-    this.address,
+    this.addressId,
     this.avatar_link =
         'https://m.media-amazon.com/images/I/41V5FtEWPkL._SX300_SY300_QL70_FMwebp_.jpg',
     this.bio,
@@ -39,7 +41,7 @@ class CustomUser {
       'pass': pass,
       'phone': phone,
       'isSeller': isSeller,
-      'address': address,
+      'addressId': addressId,
       'avatar_link': avatar_link,
       'bio': bio,
       'nationality': nationality,
@@ -57,7 +59,7 @@ class CustomUser {
       pass: map['pass'],
       phone: map['phone'],
       isSeller: map['isSeller'] ?? false,
-      address: map['address'],
+      addressId: map['addressId'],
       avatar_link: map['avatar_link'],
       bio: map['bio'],
       nationality: map['nationality'] ?? '',

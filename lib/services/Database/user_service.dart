@@ -16,18 +16,25 @@ class ProfileService {
     }
   }
   // read
-  Future<CustomUser?> getUserProfile(String uid) async {
+  Future<CustomUser> getUserProfile(String uid) async {
     try {
       final doc = await _firestore.collection('users').doc(uid).get();
       if (doc.exists) {
         return CustomUser.fromMap(doc.data()!);
       } else {
         print('User profile not found.');
-        return null;
+        return CustomUser();
       }
     } catch (e) {
       print('Error fetching user profile: $e');
       throw e;
+    }
+  }
+  Future<void> updateAddressId(String uid, String addressId) async {
+    try {
+      await _firestore.collection('users').doc(uid).update({'addressId': addressId});
+    } catch (e) {
+      throw Exception('Failed to update addressId: $e');
     }
   }
 
@@ -40,5 +47,15 @@ class ProfileService {
       print('Error updating user profile: $e');
       throw e;
     }
+
   }
+  Future<void> updateUserName(String uid, String name) async {
+    await updateUserProfile(uid, {'name': name});
+  }
+
+  Future<void> updateUserPhone(String uid, String phone) async {
+    await updateUserProfile(uid, {'phone': phone});
+  }
+
+
 }

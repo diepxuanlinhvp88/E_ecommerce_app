@@ -5,6 +5,7 @@ import '../../model/product.dart';
 
 class CartService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List<CartItem> _listSelectItem = [];
 
   //create
   Future<void> addToCart(Product product, String userId, int quantity) async {
@@ -78,6 +79,9 @@ class CartService {
           );
         }).toList();
       } else {
+        await cartRef.set({'cartItems': []});
+        print('gio hang loi');
+
         return [];
       }
     } catch (e) {
@@ -112,7 +116,54 @@ class CartService {
       print("Error updating cart item quantity: $e");
     }
   }
+  // delete
+  Future<void> deleteProduct(String userId) async {
+    try {
+      final cartRef = _firestore.collection('carts').doc(userId);
+      final cartSnapshot = await cartRef.get();
+
+      if (cartSnapshot.exists) {
+        final data = cartSnapshot.data() as Map<String, dynamic>;
+        final List<dynamic> cartItems = data['cartItems'] ?? [];
+
+        // Lọc ra những sản phẩm chưa được chọn
+        final updatedCartItems = cartItems.where((item) {
+          final productId = item['productId'];
+          return !_listSelectItem.any((selectedItem) => selectedItem.productId == productId);
+        }).toList();
+
+        // Cập nhật lại giỏ hàng với các sản phẩm chưa được chọn
+        await cartRef.update({
+          'cartItems': updatedCartItems,
+        });
+
+        print('Selected items cleared successfully');
+      }
+    } catch (e) {
+      print("Error clearing selected items: $e");
+      rethrow;
+    }
+  }
 
 
+  //add selectItem
+  List<CartItem>? addItem(List<CartItem> list, CartItem item) {
+    list.add(item);
+    return list;
+  }
 
+  //remove
+  List<CartItem>? removeItem(List<CartItem> list, CartItem item) {
+    list.remove(item);
+    return list;
+  }
+
+  List<CartItem> getListSelectItem() {
+    return _listSelectItem;
+  }
+
+  void setListSelectItem( List<CartItem> list) {
+
+    _listSelectItem = list;
+  }
 }

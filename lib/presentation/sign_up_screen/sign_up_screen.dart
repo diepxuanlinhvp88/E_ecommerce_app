@@ -63,15 +63,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: _passwordController.text.trim(),
       );
       final userModel = CustomUser(
-          uid: userCredential!.user!.uid,
-          name: _nameController.text,
-          email: _emailController.text,
-          pass: _passwordController.text,
-          nationality: _selectedNationality,
-          gender: _selectedGender,
-          address: _addressController.text,
-          phone: _phoneController.text,
-          isSeller: false);
+        uid: userCredential!.user!.uid,
+        name: _nameController.text,
+        email: _emailController.text,
+        pass: _passwordController.text,
+        nationality: _selectedNationality,
+        gender: _selectedGender,
+        phone: _phoneController.text,
+      );
 
       if (userCredential != null && userCredential.user != null) {
         print("Signup successful!");
@@ -416,61 +415,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                         SizedBox(height: 14.h),
-
-                        //address
-                        SizedBox(
-                          width: double.maxFinite,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Address*',
-                                style: theme.textTheme.bodyMedium,
-                              ),
-                              SizedBox(height: 2.h),
-                              CustomTextFormField(
-                                controller: _addressController,
-                                hintText: "Please enter your address",
-                                textInputType: TextInputType.phone,
-                                contentPadding: EdgeInsets.all(10.h),
-                                validator: (value) {
-                                  if (value?.isEmpty ?? true) {
-                                    return 'Please enter your address';
-                                  }
-
-                                  return null;
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-
-                        //Role
-                        SizedBox(
-                          width: double.maxFinite,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Role*',
-                                style: theme.textTheme.bodyMedium,
-                              ),
-                              SizedBox(height: 2.h),
-                              CustomTextFormField(
-                                hintText: "Buyer/ Seller",
-                                textInputType: TextInputType.phone,
-                                contentPadding: EdgeInsets.all(10.h),
-                                validator: (value) {
-                                  if (value?.isEmpty ?? true) {
-                                    return 'Please enter your address';
-                                  }
-
-                                  return null;
-                                },
-                              )
-                            ],
-                          ),
-                        ),
 
                         // Checkboxes
                         CheckboxListTile(
