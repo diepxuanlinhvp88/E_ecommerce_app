@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/app_export.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/custom_text_form_field.dart';
-import '../../widgets/custom_button_bar.dart';
+import '../../widgets/custom_bottom_bar.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -50,7 +51,6 @@ class _SignInScreenState extends State<SignInScreen> {
         child: CustomBottomBar(
           selectedIndex: 2,
           onChanged: (BottomBarEnum type) {
-
           },
         )
       ),
@@ -257,29 +257,21 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _signIn(AuthService authService) async {
     if (!_formKey.currentState!.validate()) {
-      return; // Stop if form is invalid
+      return;
     }
-
     try {
-      final bool success = (await authService.signIn(
+      final UserCredential userCredential = await authService.signIn(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
-      )) as bool;
+      );
 
-      if (success && mounted) {
+      if (userCredential.user != null && mounted) {
         Navigator.pushNamed(context, AppRoutes.homeScreen);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(content: Text('${e.toString()}')),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 }

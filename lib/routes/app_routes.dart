@@ -42,7 +42,7 @@ class AppRoutes {
     homeScreen: (context) => const HomeScreen(),
     signUpScreen: (context) => const SignUpScreen(),
     welcomeOnboardingScreen: (context) => const WelcomeOnboardingScreen(),
-    forgotPasswordScreen: (context) => ForgotPasswordScreen(),
+    forgotPasswordScreen: (context) => const ForgotPasswordScreen(),
     cartScreen: (context) => CartScreen(),
     profileScreen: (context) => ProfileScreen(),
   };

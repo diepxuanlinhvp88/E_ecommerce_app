@@ -47,6 +47,12 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   http: ^1.2.0
   cached_network_image: ^3.4.1
+  qr_flutter: ^4.1.0
+  flutter_stripe: ^10.2.0
+  dio: ^5.5.0+1
+  firebase_storage: ^12.3.7
+  image_picker: ^1.1.2
+  permission_handler: ^11.3.1
 
 
 dev_dependencies:
@@ -77,6 +83,7 @@ flutter:
     - lib/assets/images/
     - lib/assets/images/logo.svg
     - lib/assets/images/banner1.png
+    - lib/assets/images/default_ava.svg
     - lib/assets/images/banner2.png
     - lib/assets/images/img_welcome_onboarding.jpg
     - lib/assets/icons/computer_and_accessories.svg
@@ -90,6 +97,7 @@ flutter:
     - lib/assets/icons/nav_account.svg
     - lib/assets/icons/nav_cart.svg
     - lib/assets/icons/nav_menu.svg
+    - functions/requirements.txt
 
 
 

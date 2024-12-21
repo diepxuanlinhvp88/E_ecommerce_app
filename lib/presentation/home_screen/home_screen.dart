@@ -5,16 +5,18 @@ import 'package:provider/provider.dart';
 import 'package:untitled/presentation/detail_screen/detail_screen.dart';
 import 'package:untitled/presentation/home_screen/models/banner_list_item_model.dart';
 import 'package:untitled/presentation/home_screen/models/home_screen_model.dart';
+import 'package:untitled/presentation/home_screen/search_screen.dart';
 import '../../core/app_export.dart';
 import '../../model/product.dart';
 import '../../widgets/custom_text_form_field.dart';
+import '../category_screen/category_screen.dart';
 import 'widgets/banner_list_item_widget.dart';
 import 'widgets/product_slider_list_item_widget.dart';
 import 'widgets/category_list_item_widget.dart';
 import 'package:untitled/widgets/product_card.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'provider/home_screen_provider.dart';
-import '../../widgets/custom_button_bar.dart';
+import '../../widgets/custom_bottom_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,10 +25,11 @@ class HomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
 
   static Widget builder(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => HomeScreenProvider(),
-      child: const HomeScreen(),
-    );
+    return HomeScreen();
+    // return ChangeNotifierProvider(
+    //   create: (context) => HomeScreenProvider(),
+    //   child: const HomeScreen(),
+    // );
   }
 }
 
@@ -34,6 +37,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    final provider = context.read<HomeScreenProvider>();
   }
 
   @override
@@ -43,7 +47,8 @@ class HomeScreenState extends State<HomeScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80.0),
         child: AppBar(
-          backgroundColor: Colors.transparent.withOpacity(0),
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
           toolbarHeight: 110.0,
@@ -58,7 +63,6 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           title: _buildSearchSection(context),
         ),
-        // title: _buildSearchSection(context),
       ),
       bottomNavigationBar: SizedBox(
           width: double.maxFinite,
@@ -74,9 +78,9 @@ class HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 145.h),
+                  SizedBox(height: 150.h),
                   _buildBannerSection(context),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 24.h),
                   Container(
                     width: double.maxFinite,
                     padding: EdgeInsets.only(top: 16.h, bottom: 36.h),
@@ -111,9 +115,7 @@ class HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       color: appTheme.blueGray100.withOpacity(0.38),
                     ),
-                    child: Column(
-                      children: [_buildRecommendedProductGrid(context)],
-                    ),
+                    child: _buildRecommendedProductGrid(context),
                   )
                 ],
               ),
@@ -130,8 +132,11 @@ class HomeScreenState extends State<HomeScreen> {
           return CustomTextFormField(
             hintText: "Search",
             contentPadding:
-                EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
+            EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
             controller: searchController,
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
+            },
           );
         },
       ),
@@ -299,7 +304,15 @@ class HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index, _) {
               return CategoryListItemWidget(
                 categoryListItemObj: categoryList[index],
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CategoryScreen(category: categoryList[index]),
+                    ),
+                  );
+                },
               );
             },
           );
@@ -329,7 +342,8 @@ class HomeScreenState extends State<HomeScreen> {
             ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 6,
+            padding: EdgeInsets.zero,
+            itemCount: 50,
             itemBuilder: (context, index) {
               final product = relatedProducts[index];
               return GestureDetector(

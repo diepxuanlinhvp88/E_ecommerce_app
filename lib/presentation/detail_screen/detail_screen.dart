@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/core/app_export.dart';
 import 'package:untitled/model/product.dart';
-import 'package:untitled/services/Database/cart_service.dart';
-import 'package:untitled/services/Database/product_service.dart';
+import 'package:untitled/services/cart_service.dart';
 import 'package:untitled/services/product_service.dart';
 import 'package:untitled/theme/custom_text_style.dart';
 import 'package:untitled/widgets/custom_elevated_button.dart';
 import 'package:untitled/widgets/custom_rating_bar.dart';
 import 'package:untitled/widgets/product_card.dart';
 import '../../model/reviews.dart';
+import '../../widgets/custom_bottom_bar.dart';
+import '../../widgets/custom_text_form_field.dart';
+import '../home_screen/provider/home_screen_provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.product});
 
   final Product product;
-
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -24,8 +26,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool isExpandedDetails = false;
   bool isExpandedReviews = false;
 
-  late Future<List<Product>> futureRelatedProducts;
-  // late Future<List<Product>> jsonProduct;
+  late Future<List<Review>> reviewsFuture;
+  late Future<List<Product>> relatedProductFuture;
   late Future<List<Product>> firestoreProductList;
   late CartService cartService;
   var userId;
@@ -34,19 +36,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
     super.initState();
+    reviewsFuture = widget.product.fetchAllReviews(widget.product.product_id);
+    relatedProductFuture = widget.product.fetchRelatedProducts(widget.product.product_id);
+
     // Giả sử bạn lấy dữ liệu sản phẩm liên quan từ Firestore hoặc API
 
-    // jsonProduct = ProductService().loadProductsFromJson();
     firestoreProductList = ProductService().fetchAllProducts();
     userId = AuthService().getCurrentUser()?.uid;
-    // userId = 'hcVXheLM9Jc0uSuHszIl27v3ugj1';
     cartService = CartService();
 
   }
 
   Future<List<Product>> fetchRelatedProducts() async {
     final products = await firestoreProductList;
-    return products.take(20).toList();
+    return products.take(10).toList();
   }
 
   int quantity = 1;
@@ -68,48 +71,43 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: LightCodeColors().deepPurpleA200,
-        elevation: 1,
-        leading: IconButton(
-
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.homeScreen)
-        ),
-
-        title: Container(
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'Search',
-              prefixIcon: Icon(Icons.search, color: Colors.grey),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          toolbarHeight: 110.0,
+          flexibleSpace: ClipRRect(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(12.h),
+              bottomRight: Radius.circular(12.h),
+            ),
+            child: Container(
+              color: appTheme.deepPurpleA200,
             ),
           ),
+          title: _buildSearchSection(context),
         ),
-        actions: [
-          IconButton(onPressed: (){
-            Navigator.pushNamed(context, AppRoutes.cartScreen);
-
-          }, icon: Icon(Icons.shopping_cart))
-        ],
       ),
+      bottomNavigationBar: SizedBox(
+          width: double.maxFinite,
+          child: CustomBottomBar(
+            selectedIndex: 0,
+            onChanged: (BottomBarEnum type) {},
+          )),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Product Image
             AspectRatio(
-                aspectRatio: 1,
+                aspectRatio: 1.2,
                 child: CustomImageView(
                   imagePath: widget.product.img_link,
+                  fit: BoxFit.contain,
                 )),
-
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -139,12 +137,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           horizontal: 8,
                           vertical: 4,
                         ),
+                        margin: EdgeInsets.only(right: 16.h),
                         decoration: BoxDecoration(
                           color: LightCodeColors().orangeA200,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          '\$ ${widget.product.discount_percentage}',
+                          'SALE ${widget.product.discount_percentage} \%',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -246,7 +245,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       Expanded(
                           child: ElevatedButton(
                         onPressed: () {
-                          print(userId);
                           cartService.addToCart(widget.product, userId, quantity);
 
                         },
@@ -327,6 +325,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Container(
                       padding: EdgeInsets.all(2), child: Customer_review()),
 
+
                   // Related Products
                   const Text(
                     'Related Products',
@@ -337,11 +336,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   const SizedBox(height: 8),
                   _buildRelatedProductItem(widget.product)
+                  // _buildReviewsSection(context),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSearchSection(BuildContext context) {
+    return Expanded(
+      child: Selector<HomeScreenProvider, TextEditingController?>(
+        selector: (context, provider) => provider.searchController,
+        builder: (context, searchController, child) {
+          return CustomTextFormField(
+            hintText: "Search",
+            contentPadding:
+            EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
+            controller: searchController,
+          );
+        },
       ),
     );
   }
@@ -373,34 +389,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ],
         ),
-        Row(
-          children: [
-            Text(
-              '${widget.product.rating}',
-              style: TextStyle(fontSize: 16, color: appTheme.orangeA200),
-            ),
-            const SizedBox(width: 4),
-            CustomRatingBar(
-              ignoreGestures: true,
-              initialRating: widget.product.rating,
-              color: appTheme.orangeA200,
-            ),
-            Text(
-              '${widget.product.rating_count}',
-              style: TextStyle(fontSize: 16, color: appTheme.orangeA200),
-            ),
-          ],
-        ),
-        Column(
-          children: List.generate(
+        FutureBuilder<List<Review>>(
+          future: reviewsFuture, // Tham chiếu đến Future trả về danh sách reviews
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator(); // Hiển thị loading khi chờ dữ liệu
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}'); // Hiển thị lỗi nếu có
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Text('No reviews available'); // Không có review
+            } else {
+              final reviews = snapshot.data!;
+              // Nếu không đủ 3 review, hiển thị tất cả review có trong danh sách
+              final reviewsToDisplay = isExpandedReviews || reviews.length <= 3
+                  ? reviews
+                  : reviews.take(3).toList(); // Lấy tối đa 3 review
 
-            isExpandedReviews ? (widget.product.reviews.length ) : (widget.product.reviews.length > 0 ? 1 : 0 ) ,
-            (index) {
-              final review = widget.product.reviews[index];
-              return _buildReviewItem(review);
-            },
-          ),
-        ),
+              return Column(
+                children: List.generate(
+                  reviewsToDisplay.length, // Sử dụng số lượng review thực tế cần hiển thị
+                      (index) {
+                    final review = reviewsToDisplay[index];
+                    return _buildReviewItem(review);
+                  },
+                ),
+              );
+            }
+          },
+        )
+
       ],
     );
   }
@@ -411,12 +428,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           CircleAvatar(
-            child: Text('N'.toUpperCase()),
+            child: Text(review.review_name[0].toUpperCase()),
           ),
           SizedBox(
             width: 12,
           ),
-          Text(review.user_name,
+          Text(review.review_name,
               style: CustomTextStyles.titleProductBlack
                   .copyWith(fontWeight: FontWeight.normal)),
         ]),
@@ -440,14 +457,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _buildRelatedProductItem(Product product) {
     return FutureBuilder<List<Product>>(
-      future: fetchRelatedProducts(),
+      future: relatedProductFuture, // Tham chiếu đến hàm lấy thông tin sản phẩm từ IDs
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No related products found.'));
+          return const Center(child: Text('No related products found.'));
         } else {
           final relatedProducts = snapshot.data!;
           return GridView.builder(
@@ -459,20 +476,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 20,
+            itemCount: relatedProducts.length,
             itemBuilder: (context, index) {
-              final product = relatedProducts[index];
+              final relatedProduct = relatedProducts[index];
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          ProductDetailScreen(product: product),
+                          ProductDetailScreen(product: relatedProduct),
                     ),
                   );
                 },
-                child: ProductCard(product),
+                child: ProductCard(relatedProduct),
               );
             },
           );
@@ -480,4 +497,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       },
     );
   }
+
+
+
 }

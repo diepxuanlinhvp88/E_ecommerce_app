@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/core/app_export.dart';
-import 'package:untitled/services/Database/cart_service.dart';
+import 'package:untitled/presentation/orders_screen/order_screen.dart';
+import 'package:untitled/services/cart_service.dart';
 import 'package:untitled/widgets/custom_elevated_button.dart';
 
 import '../../model/Cart/cart_item.dart';
@@ -17,42 +18,69 @@ class _CartScreenState extends State<CartScreen> {
   late Product product;
   late CartService cartService;
   late AuthService authService;
-  var userId = AuthService().getCurrentUser()!.uid;
-  late Future<List<CartItem>> _listCartItems;
 
+  var userId = AuthService().getCurrentUser()!.uid;
+
+  // var userId = 'hcVXheLM9Jc0uSuHszIl27v3ugj1';
+  late Future<List<CartItem>> _listCartItems;
+  late List<CartItem> listSelectItem;
 
   @override
   void initState() {
-
     super.initState();
     cartService = CartService();
     authService = AuthService();
     _listCartItems = cartService.getCartItems(userId);
+    listSelectItem = cartService.getListSelectItem();
+    listSelectItem.clear();
     // userId = authService.getCurrentUser()!.uid;
     // _getCartItems();
+  }
+
+  List<CartItem> getListSelect() {
+    return listSelectItem;
   }
 
   Future<List<CartItem>> _getCartItems() async {
     try {
       // return cartService.getCartItems(AuthService().getCurrentUser()!.uid);
 
-     return cartService.getCartItems(userId);
+      return cartService.getCartItems(userId);
     } on Exception catch (e) {
       throw (e);
     }
   }
 
   // Tính tổng số tiền của giỏ hàng
-  Future<double> _calculateTotalPrice(Future<List<CartItem>> futureCartItems) async {
+  Future<double> _calculateTotalPrice(
+      Future<List<CartItem>> futureCartItems) async {
     final cartItems = await futureCartItems;
     double total = 0.0;
     for (var item in cartItems) {
       if (item.isSelect == true) {
+        if (!listSelectItem.contains(item)) {
+          cartService.addItem(listSelectItem, item);
+        }
         total += item.price * item.quantity;
+      } else if (item.isSelect == false) {
+        if (listSelectItem.contains(item)) {
+          cartService.removeItem(listSelectItem, item);
+        }
       }
     }
+    print('list${listSelectItem.length}');
     return total;
   }
+
+  void _deleteItem() async {
+    await cartService.deleteProduct(userId);
+
+    setState(() {
+      _listCartItems = cartService.getCartItems(userId);
+      listSelectItem.clear();
+    });
+  }
+
   void _updateQuantity(CartItem item, int newQuantity) async {
     if (newQuantity < 1) return; // Ngăn không cho số lượng nhỏ hơn 1
     setState(() {
@@ -60,9 +88,9 @@ class _CartScreenState extends State<CartScreen> {
     });
 
     // Cập nhật số lượng lên Firestore
-    await cartService.updateCartItemQuantity(userId, item.productId, newQuantity);
+    await cartService.updateCartItemQuantity(
+        userId, item.productId, newQuantity);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,15 +98,13 @@ class _CartScreenState extends State<CartScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: (){
-            setState(() {
-
-            });
-            Navigator.pushNamed(context, AppRoutes.homeScreen);
+          onPressed: () {
+            setState(() {});
+            Navigator.pop(context);
           },
         ),
         title: FutureBuilder<List<CartItem>>(
-          future: _listCartItems, // Future danh sách giỏ hàng
+          future: _listCartItems,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Text('CART (Loading...)');
@@ -122,12 +148,8 @@ class _CartScreenState extends State<CartScreen> {
                             Checkbox(
                               value: item.isSelect,
                               onChanged: (val) {
-                                print(' isSelect = ${item.isSelect}');
-                                print(' val = ${val}');
                                 setState(() {
                                   item.isSelect = val ?? false;
-                                  print(' isSelect = ${item.isSelect}');
-                                  print(' val = ${val}');
                                 });
                               },
                             ),
@@ -150,30 +172,32 @@ class _CartScreenState extends State<CartScreen> {
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 5,
                                   ),
-
-
                                   Row(
                                     children: [
                                       Text(
                                         '\$${item.price}',
-                                        style: CustomTextStyles.titleSmallPrimary,
+                                        style:
+                                        CustomTextStyles.titleSmallPrimary,
                                       ),
                                       Spacer(),
                                       IconButton(
                                         icon: Icon(Icons.remove),
                                         onPressed: item.quantity > 1
                                             ? () {
-                                          _updateQuantity(item,
-                                              item.quantity - 1);
+                                          _updateQuantity(
+                                              item, item.quantity - 1);
                                         }
                                             : null,
+                                        iconSize: 15,
                                       ),
                                       Text('${item.quantity}'),
                                       IconButton(
                                         icon: Icon(Icons.add),
                                         onPressed: () {
-                                          _updateQuantity(item, item.quantity + 1);
+                                          _updateQuantity(
+                                              item, item.quantity + 1);
                                         },
+                                        iconSize: 15,
                                       ),
                                     ],
                                   ),
@@ -200,7 +224,7 @@ class _CartScreenState extends State<CartScreen> {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child:
-                          Center(child: Text('Error calculating total price.')),
+                      Center(child: Text('Error calculating total price.')),
                     );
                   }
 
@@ -217,7 +241,15 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            // Xử lý thanh toán
+                            cartService.setListSelectItem(listSelectItem);
+                            print(cartService.getListSelectItem().length);
+                            print(listSelectItem.length);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderScreen(
+                                      items: listSelectItem,
+                                    )));
                           },
                           child: Text(
                             'Buy',
@@ -227,6 +259,12 @@ class _CartScreenState extends State<CartScreen> {
                           style: ElevatedButton.styleFrom(
                               minimumSize: Size(200, 60)),
                         ),
+                        if (listSelectItem.length > 0)
+                          IconButton(
+                              onPressed: () {
+                                _deleteItem();
+                              },
+                              icon: Icon(Icons.delete))
                       ],
                     ),
                   );

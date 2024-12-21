@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/data/models/selection_popup_model.dart';
 import 'package:untitled/model/user.dart';
-import 'package:untitled/services/Database/user_service.dart';
+import 'package:untitled/services/user_service.dart';
 import 'package:untitled/widgets/custom_drop_down.dart';
 import '../../core/app_export.dart';
 import '../../widgets/custom_elevated_button.dart';
@@ -22,7 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -63,15 +63,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: _passwordController.text.trim(),
       );
       final userModel = CustomUser(
-          uid: userCredential!.user!.uid,
-          name: _nameController.text,
-          email: _emailController.text,
-          pass: _passwordController.text,
-          nationality: _selectedNationality,
-          gender: _selectedGender,
-          address: _addressController.text,
-          phone: _phoneController.text,
-          isSeller: false);
+        uid: userCredential!.user!.uid,
+        name: _nameController.text,
+        email: _emailController.text,
+        pass: _passwordController.text,
+        nationality: _selectedNationality,
+        gender: _selectedGender,
+        phone: _phoneController.text,
+      );
 
       if (userCredential != null && userCredential.user != null) {
         print("Signup successful!");
@@ -157,50 +156,50 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           children: [
                             Expanded(
                                 child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Nationality*",
-                                  style: theme.textTheme.bodyMedium,
-                                ),
-                                SizedBox(height: 2.h),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 8.h),
-                                  child: CustomDropDown(
-                                    icon: Container(
-                                      margin: EdgeInsets.only(left: 16.0),
-                                      child: Icon(Icons.keyboard_arrow_down),
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Nationality*",
+                                      style: theme.textTheme.bodyMedium,
                                     ),
-                                    iconSize: 14.h,
-                                    hintText: "Vietnam",
-                                    items: SignUpModel().nationalityList,
-                                  ),
-                                )
-                              ],
-                            )),
+                                    SizedBox(height: 2.h),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 8.h),
+                                      child: CustomDropDown(
+                                        icon: Container(
+                                          margin: EdgeInsets.only(left: 16.0),
+                                          child: Icon(Icons.keyboard_arrow_down),
+                                        ),
+                                        iconSize: 14.h,
+                                        hintText: "Vietnam",
+                                        items: SignUpModel().nationalityList,
+                                      ),
+                                    )
+                                  ],
+                                )),
                             Expanded(
                                 child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Gender*",
-                                  style: theme.textTheme.bodyMedium,
-                                ),
-                                SizedBox(height: 2.h),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 8.h),
-                                  child: CustomDropDown(
-                                    icon: Container(
-                                      margin: EdgeInsets.only(left: 16.0),
-                                      child: Icon(Icons.keyboard_arrow_down),
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Gender*",
+                                      style: theme.textTheme.bodyMedium,
                                     ),
-                                    iconSize: 14.h,
-                                    hintText: "Male",
-                                    items: SignUpModel().genderList,
-                                  ),
-                                )
-                              ],
-                            )),
+                                    SizedBox(height: 2.h),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 8.h),
+                                      child: CustomDropDown(
+                                        icon: Container(
+                                          margin: EdgeInsets.only(left: 16.0),
+                                          child: Icon(Icons.keyboard_arrow_down),
+                                        ),
+                                        iconSize: 14.h,
+                                        hintText: "Male",
+                                        items: SignUpModel().genderList,
+                                      ),
+                                    )
+                                  ],
+                                )),
                           ],
                         ),
                         SizedBox(height: 14.h),
@@ -216,28 +215,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           children: [
                             Expanded(
                                 child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Name*",
-                                  style: theme.textTheme.bodyMedium,
-                                ),
-                                SizedBox(height: 2.h),
-                                Padding(
-                                    padding: EdgeInsets.only(right: 8.h),
-                                    child: CustomTextFormField(
-                                      hintText: "John",
-                                      contentPadding: EdgeInsets.all(10.h),
-                                      controller: _nameController,
-                                      validator: (value) {
-                                        if (value?.isEmpty ?? true) {
-                                          return 'Please enter your name';
-                                        }
-                                        return null;
-                                      },
-                                    ))
-                              ],
-                            )),
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Name*",
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                    SizedBox(height: 2.h),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 8.h),
+                                        child: CustomTextFormField(
+                                          hintText: "John",
+                                          contentPadding: EdgeInsets.all(10.h),
+                                          controller: _nameController,
+                                          validator: (value) {
+                                            if (value?.isEmpty ?? true) {
+                                              return 'Please enter your name';
+                                            }
+                                            return null;
+                                          },
+                                        ))
+                                  ],
+                                )),
                             // SizedBox(width: 14.h),
                             // Expanded(
                             //     child: Column(
@@ -354,7 +353,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   },
                                 ),
                                 suffixConstraints:
-                                    BoxConstraints(maxHeight: 40.h),
+                                BoxConstraints(maxHeight: 40.h),
                                 contentPadding: EdgeInsets.all(10.h),
                                 obscureText: _obscurePassword,
                                 validator: (value) {
@@ -394,12 +393,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   onPressed: () {
                                     setState(() {
                                       _obscureConfirmPassword =
-                                          !_obscureConfirmPassword;
+                                      !_obscureConfirmPassword;
                                     });
                                   },
                                 ),
                                 suffixConstraints:
-                                    BoxConstraints(maxHeight: 40.h),
+                                BoxConstraints(maxHeight: 40.h),
                                 contentPadding: EdgeInsets.all(10.h),
                                 obscureText: _obscureConfirmPassword,
                                 validator: (value) {
@@ -416,61 +415,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                         SizedBox(height: 14.h),
-
-                        //address
-                        SizedBox(
-                          width: double.maxFinite,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Address*',
-                                style: theme.textTheme.bodyMedium,
-                              ),
-                              SizedBox(height: 2.h),
-                              CustomTextFormField(
-                                controller: _addressController,
-                                hintText: "Please enter your address",
-                                textInputType: TextInputType.phone,
-                                contentPadding: EdgeInsets.all(10.h),
-                                validator: (value) {
-                                  if (value?.isEmpty ?? true) {
-                                    return 'Please enter your address';
-                                  }
-
-                                  return null;
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-
-                        //Role
-                        SizedBox(
-                          width: double.maxFinite,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Role*',
-                                style: theme.textTheme.bodyMedium,
-                              ),
-                              SizedBox(height: 2.h),
-                              CustomTextFormField(
-                                hintText: "Buyer/ Seller",
-                                textInputType: TextInputType.phone,
-                                contentPadding: EdgeInsets.all(10.h),
-                                validator: (value) {
-                                  if (value?.isEmpty ?? true) {
-                                    return 'Please enter your address';
-                                  }
-
-                                  return null;
-                                },
-                              )
-                            ],
-                          ),
-                        ),
 
                         // Checkboxes
                         CheckboxListTile(
