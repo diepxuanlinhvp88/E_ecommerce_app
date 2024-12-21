@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/app_export.dart';
+import '../../services/Remember_service.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/custom_bottom_bar.dart';
@@ -23,6 +24,27 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _isPasswordVisible = false;
   bool _loading = false;
   String _error = '';
+  bool _rememberMe = false;
+
+  RemeberService _remeberService = RemeberService();
+
+  void _loadSavedCredentials() async {
+    final credentials = await _remeberService.readCredentials();
+    if (credentials['email'] != null && credentials['password'] != null) {
+      setState(() {
+        _emailController.text = credentials['email']!;
+        _passwordController.text = credentials['password']!;
+        _rememberMe = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadSavedCredentials();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +58,9 @@ class _SignInScreenState extends State<SignInScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           children: [
-
             _buildForm(),
+            const SizedBox(height: 12),
+            _buildRemember(),
             _buildForgotPasswordButton(context),
             _buildSignInButtons(authService),
             const SizedBox(height: 12),
@@ -47,13 +70,11 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
       bottomNavigationBar: SizedBox(
-        width: double.maxFinite,
-        child: CustomBottomBar(
-          selectedIndex: 2,
-          onChanged: (BottomBarEnum type) {
-          },
-        )
-      ),
+          width: double.maxFinite,
+          child: CustomBottomBar(
+            selectedIndex: 2,
+            onChanged: (BottomBarEnum type) {},
+          )),
     );
   }
 
@@ -95,6 +116,25 @@ class _SignInScreenState extends State<SignInScreen> {
           _buildPasswordField(),
         ],
       ),
+    );
+  }
+
+  Widget _buildRemember() {
+    return Row(
+      children: [
+        Checkbox(
+          value: _rememberMe,
+          onChanged: (value) {
+            setState(() {
+              _rememberMe = value!;
+            });
+          },
+        ),
+        Text(
+          'Remember me',
+          style: CustomTextStyles.bodyMediumOnPrimaryContainer,
+        ),
+      ],
     );
   }
 

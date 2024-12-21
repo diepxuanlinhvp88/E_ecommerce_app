@@ -53,7 +53,7 @@ class Assets {
   static const String imagesBanner1 = 'lib/assets/images/banner1.png';
   static const String imagesBanner2 = 'lib/assets/images/banner2.png';
   static const String imagesDefaultAva = 'lib/assets/images/default_ava.svg';
-  static const String imagesEllipse 10 = 'lib/assets/images/Ellipse 10.svg';
+  // static const String imagesEllipse 10 = 'lib/assets/images/Ellipse 10.svg';
   static const String imagesImgWelcomeOnboarding = 'lib/assets/images/img_welcome_onboarding.jpg';
   static const String imagesLogo = 'lib/assets/images/logo.svg';
   static const String libAssetsData  = 'lib/assets/data .json';

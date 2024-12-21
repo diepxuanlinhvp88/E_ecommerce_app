@@ -53,6 +53,7 @@ dependencies:
   firebase_storage: ^12.3.7
   image_picker: ^1.1.2
   permission_handler: ^11.3.1
+  flutter_secure_storage: ^9.2.2
 
 
 dev_dependencies:
@@ -97,7 +98,7 @@ flutter:
     - lib/assets/icons/nav_account.svg
     - lib/assets/icons/nav_cart.svg
     - lib/assets/icons/nav_menu.svg
-    - functions/requirements.txt
+#    - functions/requirements.txt
 
 
 
