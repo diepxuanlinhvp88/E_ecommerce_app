@@ -4,7 +4,7 @@ import '../Cart/cart_item.dart';
 
 class OrdersModel {
   final String? orderId; // ID đơn hàng (lấy từ Firestore document ID)
-  final String userId;
+  final String? userId;
   final List<CartItem> productItems;
   final double totalPrice;
   final String status;
@@ -19,17 +19,12 @@ class OrdersModel {
     required this.createdAt,
   });
 
-
   factory OrdersModel.fromJson(String id, Map<String, dynamic> json) {
-
-
     final List<dynamic> items = json['orderItems'] ?? [];
     print('id ${json['createdAt']}');
 
-
     return OrdersModel(
       orderId: id,
-
       userId: json['userId'] ?? 'Unknown',
       productItems: items.map((item) => CartItem.fromMap(item)).toList(),
       totalPrice: (json['totalPrice'] as num?)?.toDouble() ?? 0.0,
@@ -38,8 +33,20 @@ class OrdersModel {
     );
   }
 
+  factory OrdersModel.fromFirebase(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
 
+    final List<dynamic> items = data['orderItems'] ?? [];
 
+    return OrdersModel(
+      orderId: data['orderId'],
+      userId: data['userId'] ?? 'gQXIJA9S8EVyYcuml7XbGeyWHd63',
+      productItems: items.map((item) => CartItem.fromMap(item)).toList(),
+      totalPrice: (data['totalPrice'] as num?)?.toDouble() ?? 0.0,
+      status: data['status'] ?? 'Pending',
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -48,7 +55,7 @@ class OrdersModel {
       'totalPrice': totalPrice,
       'status': status,
       'createdAt': createdAt,
-      'orderId' : orderId,
+      'orderId': orderId,
     };
   }
 }

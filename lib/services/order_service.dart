@@ -4,11 +4,10 @@ import '../../model/order/orders_model.dart';
 
 class OrdersService {
   final CollectionReference ordersCollection =
-  FirebaseFirestore.instance.collection('orders');
+      FirebaseFirestore.instance.collection('orders');
 
   Future<void> createOrder(OrdersModel order) async {
     try {
-
       final docRef = ordersCollection.doc();
       final orderWithId = OrdersModel(
         orderId: docRef.id,
@@ -28,12 +27,12 @@ class OrdersService {
     }
   }
 
-
   Future<OrdersModel?> getOrderById(String orderId) async {
     try {
       final snapshot = await ordersCollection.doc(orderId).get();
       if (snapshot.exists) {
-        return OrdersModel.fromJson(snapshot.id, snapshot.data() as Map<String, dynamic>);
+        return OrdersModel.fromJson(
+            snapshot.id, snapshot.data() as Map<String, dynamic>);
       }
       return null;
     } catch (e) {
@@ -43,7 +42,8 @@ class OrdersService {
 
   Future<List<OrdersModel>> getOrdersByUserId(String userId) async {
     try {
-      final snapshot = await ordersCollection.where('userId', isEqualTo: userId).get();
+      final snapshot =
+          await ordersCollection.where('userId', isEqualTo: userId).get();
       return snapshot.docs.map((doc) {
         return OrdersModel.fromJson(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
@@ -65,6 +65,28 @@ class OrdersService {
     try {
       await ordersCollection.doc(orderId).delete();
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<OrdersModel>> getAllOrders() async {
+    try {
+      final snapshot = await ordersCollection.orderBy('createdAt').get();
+      return snapshot.docs.map((doc) => OrdersModel.fromFirebase(doc)).toList();
+    } catch (e) {
+      print('Error fetching all orders: $e');
+      rethrow;
+    }
+  }
+  Future<List<OrdersModel>> getOrders() async {
+    try {
+      final snapshot =
+      await ordersCollection.orderBy('createdAt').get();
+      return snapshot.docs.map((doc) {
+        return OrdersModel.fromJson(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      print('Error fetching orders: $e');
       rethrow;
     }
   }

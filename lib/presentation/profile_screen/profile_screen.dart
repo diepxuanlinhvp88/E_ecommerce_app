@@ -8,11 +8,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:untitled/core/app_export.dart';
 import 'package:untitled/model/user.dart';
 import 'package:untitled/presentation/orders_screen/my_order_screen.dart';
+import 'package:untitled/services/shop_service/shop_service.dart';
 import 'package:untitled/services/user_service.dart';
 import 'package:untitled/widgets/custom_elevated_button.dart';
 
+import '../../model/shop_model.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../orders_screen/edit_info.dart';
+import '../shop_screen/store_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -51,10 +54,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   File? _image;
+
   Future<void> _requestPermission() async {
     var status = await Permission.storage.request();
     if (status.isGranted) {
-      _pickAndUploadImage();  // Gọi hàm chọn ảnh khi có quyền
+      _pickAndUploadImage(); // Gọi hàm chọn ảnh khi có quyền
     } else {
       print("Không có quyền truy cập bộ nhớ!");
     }
@@ -114,22 +118,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Header
             Container(
               padding:
-              EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 14),
+                  EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 14),
               color: Colors.white, // Màu nền header
               child: Row(
                 children: [
                   CircleAvatar(
                     radius: 50,
                     child: userProfile.avatar_link != ''
-                        ?Image.network(userProfile.avatar_link!)
+                        ? Image.network(userProfile.avatar_link!)
                         : IconButton(
-                      onPressed: () {
-                        _requestPermission();
-                      },
-                      icon: Icon(
-                        Icons.add_a_photo_outlined,
-                      ),
-                    ),
+                            onPressed: () {
+                              _requestPermission();
+                            },
+                            icon: Icon(
+                              Icons.add_a_photo_outlined,
+                            ),
+                          ),
                   ),
                   SizedBox(width: 20),
                   Column(
@@ -144,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               .copyWith(fontSize: 20)),
                       Container(
                         padding:
-                        EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: Color(0xFFA88A5E),
                           borderRadius: BorderRadius.circular(20),
@@ -167,8 +171,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => EditInfo(
-                                    user: userProfile,
-                                  )));
+                                        user: userProfile,
+                                      )));
                         },
                         child: Text(
                           'Edit Profile >',
@@ -258,11 +262,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             SizedBox(height: 15),
+            if (userProfile.isSeller == true)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomElevatedButton(
+                    text: 'View Store', onPressed: (){
+
+                      // ShopService().createShop(ShopModel(id: userProfile.uid!, name: userProfile.name!));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => StoreScreen(user: userProfile,)));
+                }),
+              ),
             // Upgrade Button
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomElevatedButton(text: 'Upgrade To Business Account'),
-            ),
+
+            // if (userProfile.isSeller == false)
+            //   Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child:
+            //         CustomElevatedButton(text: 'Upgrade To Business Account', onPressed: (){
+            //           ShopModel shopModel = ShopModel(id: userProfile.uid!, name: userProfile.name!);
+            //           setState(() {
+            //             userProfile.isSeller = true;
+            //           });
+            //
+            //           profileService.updateUserProfile(userId, {'isSeller': true});
+            //           ShopService().createShop(shopModel);
+            //         },),
+            //   ),
             SizedBox(height: 110),
 
             TextButton(
@@ -334,7 +359,7 @@ class GridItem extends StatelessWidget {
             backgroundColor: Color(0xFFFFD59E),
             radius: 18,
             child:
-            Icon(icon, color: LightCodeColors().deepPurpleA200, size: 20),
+                Icon(icon, color: LightCodeColors().deepPurpleA200, size: 20),
           ),
           SizedBox(width: 4),
           Text(

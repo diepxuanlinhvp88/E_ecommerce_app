@@ -32,6 +32,21 @@ class Product {
     this.reviews = const [],
   });
 
+  Map<String, dynamic> toMap() {
+    return {
+      'item_amazon_id': product_id,
+      'title': product_name,
+
+      'description': about_product,
+      'price': actual_price,
+      'rating': rating,
+      'rating_count': rating_count,
+      'discount_percentage': discount_percentage,
+      'imUrl': img_link,
+
+    };
+  }
+
 
   factory Product.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -51,6 +66,7 @@ class Product {
         discounted_price: (data['price'] * (1 - data['discount_percentage'] / 100) * 100).roundToDouble() / 100
     );
   }
+
 
 
   Future<List<Product>> fetchRelatedProducts(String id) async {

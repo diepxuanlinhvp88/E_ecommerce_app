@@ -53,7 +53,7 @@ class _OrderScreenState extends State<OrderScreen> {
     listSelect = widget.items;
     sum = calculateTotal();
     cartService = CartService();
-    _getAddress();
+    // _getAddress();
   }
 
   double calculateTotal() {
@@ -66,11 +66,14 @@ class _OrderScreenState extends State<OrderScreen> {
     CustomUser currentUser = await customUser;
     if (currentUser.addressId != null) {
       final address =
-      await AddressRepository().getAddressById(currentUser.addressId!);
-      province = address!.province;
-      district = address.district;
-      ward = address.ward;
-      print(' address : $address');
+          await AddressRepository().getAddressById(currentUser.addressId!);
+      setState(() {
+        province = address!.province;
+        district = address.district;
+        ward = address.ward;
+      });
+
+      // print(' address : $address');
     }
   }
 
@@ -97,10 +100,11 @@ class _OrderScreenState extends State<OrderScreen> {
                     return Center(child: Text('No data available'));
                   }
                   if (snapshot.hasData) {
-                    print('so san pham chon ${listSelect.length}');
-                    print(cartService);
-                    _getAddress();
+                    // print('so san pham chon ${listSelect.length}');
+                    // print(cartService);
+
                     final user = snapshot.data!;
+                    _getAddress();
                     return Container(
                       height: 100.h,
                       width: double.maxFinite,
@@ -292,7 +296,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       _buildDeliveryOption('Priority', 5,
                           'Receive from ${now.day + 1}-${now.month}-${now.year}'),
                       _buildDeliveryOption('Standard', 3,
-                          'Receive from ${now.day+ 2}-${now.month}-${now.year}'),
+                          'Receive from ${now.day + 2}-${now.month}-${now.year}'),
                       _buildDeliveryOption('Saver', 2,
                           'Receive from ${now.day + 3}-${now.month}-${now.year}'),
                     ],
@@ -337,11 +341,11 @@ class _OrderScreenState extends State<OrderScreen> {
                           SizedBox(width: 8.0),
                           Expanded(
                               child: CustomElevatedButton(
-                                text: 'Apply',
-                                onPressed: () {
-                                  print('voucher $_discountCodeController');
-                                },
-                              ))
+                            text: 'Apply',
+                            onPressed: () {
+                              print('voucher $_discountCodeController');
+                            },
+                          ))
                         ],
                       ),
                     ],
@@ -420,7 +424,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           Text(
                             '\$${calculateTotal()}',
                             style:
-                            TextStyle(color: LightCodeColors().orangeA200),
+                                TextStyle(color: LightCodeColors().orangeA200),
                           ),
                           SizedBox(
                             width: 16,
@@ -441,7 +445,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           Text(
                             '\$${_shipPrice}',
                             style:
-                            TextStyle(color: LightCodeColors().orangeA200),
+                                TextStyle(color: LightCodeColors().orangeA200),
                           ),
                           SizedBox(
                             width: 16,
@@ -465,7 +469,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           Text(
                             '\$${calculateTotal() + _shipPrice}',
                             style:
-                            TextStyle(color: LightCodeColors().orangeA200),
+                                TextStyle(color: LightCodeColors().orangeA200),
                           ),
                           SizedBox(
                             width: 16,
@@ -485,25 +489,25 @@ class _OrderScreenState extends State<OrderScreen> {
                     padding: EdgeInsets.all(8.h),
                     child: Center(
                         child: CustomElevatedButton(
-                          text: 'Buy now',
-                          onPressed: () async {
-                            OrdersModel order = OrdersModel(
-                                orderId: '',
-                                userId: userId,
-                                productItems: listSelect,
-                                totalPrice: calculateTotal() + _shipPrice,
-                                status: 'Pending',
-                                createdAt: DateTime.now());
-                            await ordersService.createOrder(order);
-                            print(userId);
-                            await cartService.deleteProduct(userId);
+                      text: 'Buy now',
+                      onPressed: () async {
+                        OrdersModel order = OrdersModel(
+                            orderId: '',
+                            userId: userId,
+                            productItems: listSelect,
+                            totalPrice: calculateTotal() + _shipPrice,
+                            status: 'Pending',
+                            createdAt: DateTime.now());
+                        await ordersService.createOrder(order);
+                        print(userId);
+                        await cartService.deleteProduct(userId);
 
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AfterOrder()));
-                          },
-                        ))),
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AfterOrder()));
+                      },
+                    ))),
               )
             ],
           ),
