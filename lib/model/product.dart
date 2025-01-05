@@ -71,21 +71,6 @@ class Product {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'item_amazon_id': product_id,
-      'title': product_name,
-      'description': about_product,
-      'price': actual_price,
-      'rating': rating,
-      'rating_count': rating_count,
-      'discount_percentage': discount_percentage,
-      'imUrl': img_link,
-    };
-  }
-
-
-
   Future<List<Product>> fetchRelatedProducts(String id) async {
     try {
       final productsCollection = FirebaseFirestore.instance.collection('amazon_products');

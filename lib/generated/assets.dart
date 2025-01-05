@@ -27,7 +27,6 @@ class Assets {
   static const String coreAppExport = 'lib/core/app_export.dart';
   static const String detailScreenDetailScreen = 'lib/presentation/detail_screen/detail_screen.dart';
   static const String forgotPasswordScreenForgotPassword = 'lib/presentation/forgot_password_screen/forgot_password.dart';
-  static const String functionsRequirements = 'functions/requirements.txt';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String homeScreenHomeScreen = 'lib/presentation/home_screen/home_screen.dart';
   static const String homeScreenSearchScreen = 'lib/presentation/home_screen/search_screen.dart';
@@ -61,7 +60,6 @@ class Assets {
   static const String modelCountQuantity = 'lib/presentation/detail_screen/model/count_quantity.dart';
   static const String modelProduct = 'lib/model/product.dart';
   static const String modelReviews = 'lib/model/reviews.dart';
-  static const String modelSellerModel = 'lib/model/seller_model.dart';
   static const String modelShopModel = 'lib/model/shop_model.dart';
   static const String modelUser = 'lib/model/user.dart';
   static const String modelsBannerListItemModel = 'lib/presentation/home_screen/models/banner_list_item_model.dart';
@@ -95,7 +93,7 @@ class Assets {
   static const String shopScreenAddProduct = 'lib/presentation/shop_screen/addProduct.dart';
   static const String shopScreenProductStoreItem = 'lib/presentation/shop_screen/productStoreItem.dart';
   static const String shopScreenShopOrderListScreen = 'lib/presentation/shop_screen/shop_order_list_screen.dart';
-  static const String shopScreenShopOrderModel = 'lib/presentation/shop_screen/shop_order_model.dart ';
+  static const String shopScreenShopOrderModel = 'lib/presentation/shop_screen/shop_order_model.dart';
   static const String shopScreenStoreScreen = 'lib/presentation/shop_screen/store_screen.dart';
   static const String shopServiceShopService = 'lib/services/shop_service/shop_service.dart';
   static const String signInScreenSignInScreen = 'lib/presentation/sign_in_screen/sign_in_screen.dart';
