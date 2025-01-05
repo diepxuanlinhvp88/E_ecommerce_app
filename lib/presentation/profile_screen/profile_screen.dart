@@ -8,8 +8,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:untitled/core/app_export.dart';
 import 'package:untitled/model/user.dart';
 import 'package:untitled/presentation/orders_screen/my_order_screen.dart';
+import 'package:untitled/presentation/welcome_onboarding_screen/welcome_onboarding_screen.dart';
 import 'package:untitled/services/user_service.dart';
 import 'package:untitled/widgets/custom_elevated_button.dart';
+import 'package:untitled/services/shop_service/shop_service.dart';
+import '../../model/shop_model.dart';
+import '../shop_screen/store_screen.dart';
+
 
 import '../../widgets/custom_bottom_bar.dart';
 import '../orders_screen/edit_info.dart';
@@ -258,15 +263,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             SizedBox(height: 15),
+            if (userProfile.isSeller == true)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomElevatedButton(
+                    text: 'View Store', onPressed: (){
+                  // ShopService().createShop(ShopModel(id: userProfile.uid!, name: userProfile.name!));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => StoreScreen(user: userProfile,)));
+                }),
+              ),
             // Upgrade Button
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomElevatedButton(text: 'Upgrade To Business Account'),
-            ),
             SizedBox(height: 110),
 
             TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                try {
+                  await AuthService().signOut();
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => WelcomeOnboardingScreen()),
+                  );
+                } catch (e) {
+                  // Hiển thị thông báo lỗi
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(e.toString())),
+                  );
+                }
+              },
               child: Text(
                 'Sign Out',
                 style: CustomTextStyles.bodyMediumPrimary

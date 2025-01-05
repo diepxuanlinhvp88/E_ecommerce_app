@@ -54,7 +54,7 @@ class ProductCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '\$${((product.actual_price * 0.012) * 100).round() / 100}',
+                        '\$${((product.actual_price) * 100).round() / 100}',
                         style: CustomTextStyles.labelLargePrimary
                             .copyWith(fontSize: 18),
                       ),
@@ -63,7 +63,7 @@ class ProductCard extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.only(left: 2.h),
                           child: Text(
-                            '\$${((product.actual_price * 0.7 * 0.012) * 100).round() / 100}',
+                            '\$${((product.discounted_price) * 100).round() / 100}',
                             style: CustomTextStyles.labelLargePrimary.copyWith(
                                 decoration: TextDecoration.lineThrough,
                                 decorationColor: appTheme.blueGray100,

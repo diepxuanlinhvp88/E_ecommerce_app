@@ -5,6 +5,7 @@ import '../../core/app_export.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/custom_bottom_bar.dart';
+import '../../services/Remember_service.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -21,8 +22,35 @@ class _SignInScreenState extends State<SignInScreen> {
   // State variables
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
-  bool _loading = false;
-  String _error = '';
+  bool _rememberMe = false;
+  bool _isLoading = false; // Loading state for button
+
+  final RemeberService _remeberService = RemeberService();
+
+  void _saveCredentials(String email, String password) async {
+    if (_rememberMe) {
+      await _remeberService.saveCredentials(email, password);
+    } else {
+      await _remeberService.clearCredentials(); // Xóa thông tin nếu "Remember Me" bị tắt
+    }
+  }
+
+  void _loadSavedCredentials() async {
+    final credentials = await _remeberService.readCredentials();
+    if (credentials['email'] != null && credentials['password'] != null) {
+      setState(() {
+        _emailController.text = credentials['email']!;
+        _passwordController.text = credentials['password']!;
+        _rememberMe = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +64,9 @@ class _SignInScreenState extends State<SignInScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           children: [
-
             _buildForm(),
+            const SizedBox(height: 12),
+            _buildRemember(),
             _buildForgotPasswordButton(context),
             _buildSignInButtons(authService),
             const SizedBox(height: 12),
@@ -50,10 +79,28 @@ class _SignInScreenState extends State<SignInScreen> {
         width: double.maxFinite,
         child: CustomBottomBar(
           selectedIndex: 2,
-          onChanged: (BottomBarEnum type) {
-          },
-        )
+          onChanged: (BottomBarEnum type) {},
+        ),
       ),
+    );
+  }
+
+  Widget _buildRemember() {
+    return Row(
+      children: [
+        Checkbox(
+          value: _rememberMe,
+          onChanged: (value) {
+            setState(() {
+              _rememberMe = value!;
+            });
+          },
+        ),
+        Text(
+          'Remember me',
+          style: CustomTextStyles.bodyMediumOnPrimaryContainer,
+        ),
+      ],
     );
   }
 
@@ -129,7 +176,7 @@ class _SignInScreenState extends State<SignInScreen> {
           controller: _emailController,
           hintText: "Please enter your email",
           textInputType: TextInputType.emailAddress,
-          contentPadding: EdgeInsets.all(10.h),
+          contentPadding: const EdgeInsets.all(10),
           validator: (value) {
             if (value?.isEmpty ?? true) {
               return 'Please enter your email';
@@ -169,7 +216,7 @@ class _SignInScreenState extends State<SignInScreen> {
               color: Colors.grey,
             ),
           ),
-          contentPadding: EdgeInsets.all(10.h),
+          contentPadding: const EdgeInsets.all(10),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter a valid password";
@@ -201,7 +248,7 @@ class _SignInScreenState extends State<SignInScreen> {
       children: [
         Expanded(
           child: CustomElevatedButton(
-            text: 'Sign In',
+            text: _isLoading ? 'Signing In...' : 'Sign In',
             height: 50,
             buttonStyle: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
@@ -210,7 +257,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            onPressed: () => _signIn(authService),
+            onPressed: _isLoading ? null : () => _signIn(authService),
           ),
         ),
         const SizedBox(width: 10),
@@ -259,6 +306,9 @@ class _SignInScreenState extends State<SignInScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    setState(() {
+      _isLoading = true;
+    });
     try {
       final UserCredential userCredential = await authService.signIn(
         email: _emailController.text.trim(),
@@ -266,12 +316,17 @@ class _SignInScreenState extends State<SignInScreen> {
       );
 
       if (userCredential.user != null && mounted) {
+        _saveCredentials(_emailController.text.trim(), _passwordController.text.trim());
         Navigator.pushNamed(context, AppRoutes.homeScreen);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${e.toString()}')),
+        SnackBar(content: Text('Login failed: $e')),
       );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 }

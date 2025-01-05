@@ -35,7 +35,7 @@ class MyOrderScreen extends StatelessWidget {
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () =>
-                Navigator.pushNamed(context, AppRoutes.homeScreen)),
+                Navigator.pop(context)),
         centerTitle: true,
       ),
       body: Column(
@@ -164,12 +164,6 @@ class MyOrderScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: Colors.black),
-                ),
-                CustomElevatedButton(
-                  onPressed: () {},
-                  height: 40.h,
-                  width: 100.h,
-                  text: 'Write review',
                 ),
               ],
             ),

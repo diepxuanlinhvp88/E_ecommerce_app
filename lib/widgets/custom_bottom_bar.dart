@@ -37,12 +37,12 @@ class CustomBottomBarState extends State<CustomBottomBar> {
         title: "Account",
         type: BottomBarEnum.Account
     ),
-    BottomMenuModel(
-        icon: "lib/assets/icons/nav_menu.svg",
-        activeIcon: "lib/assets/icons/nav_menu.svg",
-        title: "Menu",
-        type: BottomBarEnum.Menu
-    )
+    // BottomMenuModel(
+    //     icon: "lib/assets/icons/nav_menu.svg",
+    //     activeIcon: "lib/assets/icons/nav_menu.svg",
+    //     title: "Menu",
+    //     type: BottomBarEnum.Menu
+    // )
   ];
 
   String _getRouteNameFromType(BottomBarEnum type) {

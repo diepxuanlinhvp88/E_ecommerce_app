@@ -5,9 +5,8 @@ import 'package:untitled/services/order_service.dart';
 class MyOrderService{
   final CollectionReference ordersCollection = FirebaseFirestore.instance.collection('orders');
   Future<List<OrdersModel>> getOrdersByUserId(String userId) async {
-    final userID = 'gQXIJA9S8EVyYcuml7XbGeyWHd63';
     final ordersRef = FirebaseFirestore.instance.collection('orders');
-    final query = ordersRef.where('userID', isEqualTo: userID);
+    final query = ordersRef.where('userID', isEqualTo: userId);
 
     try {
       final querySnapshot = await query.get();

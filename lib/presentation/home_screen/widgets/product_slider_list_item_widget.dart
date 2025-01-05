@@ -29,7 +29,7 @@ class ProductSliderListItemWidget extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(bottom: 8.h),
                 child: Text(
-                  'SALE ${product.discount_percentage}',
+                  'SALE ${product.discount_percentage} %',
                   style: CustomTextStyles.labelLargePrimary,
                 ),
               ),

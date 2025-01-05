@@ -30,10 +30,17 @@ class HomeScreenModel {
 
   Future<List<Product>> recommendedProductList() async {
     if (getAllProductFirestore() != null) {
+      final productList = await productService.fetchRecommendedProducts(AuthService().getCurrentUser()!.uid);
+      return productList.toList();
+    }
+    return [];
+  }
+
+  Future<List<Product>> randomProductList() async {
+    if (getAllProductFirestore() != null) {
       final productList = await productService.fetchAllProducts();
       return productList.toList();
     }
-
     return [];
   }
 
@@ -75,4 +82,5 @@ class HomeScreenModel {
         name: "Cell Phones",
         imageUrl: "lib/assets/icons/groceries.svg"),
   ];
+
 }

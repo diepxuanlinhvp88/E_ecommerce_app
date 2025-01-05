@@ -6,6 +6,7 @@ import 'package:untitled/presentation/home_screen/provider/home_screen_provider.
 import 'package:untitled/services/product_service.dart';
 
 import '../../theme/theme_helper.dart';
+import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/product_card.dart';
 import '../detail_screen/detail_screen.dart';
 
@@ -26,36 +27,51 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: appTheme.deepPurpleA200,
-        elevation: 0,
-        title: TextField(
-          controller: searchController,
-          autofocus: true,
-          decoration: InputDecoration(
-            hintText: 'Search...',
-            border: InputBorder.none,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          toolbarHeight: 110.0,
+          flexibleSpace: ClipRRect(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(12.0),
+              bottomRight: Radius.circular(12.0),
+            ),
+            child: Container(
+              color: appTheme.deepPurpleA200,
+            ),
           ),
-          onChanged: (value) {
-            setState(() {
-              isClickSearch = false;
-              print(isClickSearch);
-              // Update search results when input changes
-            });
-          },
+          title: Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  hintText: "Search",
+                  contentPadding:
+                  EdgeInsets.symmetric(horizontal: 12.h, vertical: 6.h),
+                  controller: searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      isClickSearch = false;
+                      // Update search results when input changes
+                    });
+                  },
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  setState(() {
+                    isClickSearch = true;
+                    print(isClickSearch);
+                  });
+                },
+              ),
+            ],
+          ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              setState(() {
-                isClickSearch = true;
-                print(isClickSearch);
-              });
-            },
-          ),
-          SizedBox(width: 8),
-        ],
       ),
       body: isClickSearch
           ? SingleChildScrollView(
@@ -80,7 +96,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildSearchResults(BuildContext context) {
     return FutureBuilder<List<Product>>(
-      future: context.read<ProductService>().fetchProductsByName(searchController.text),
+      future: context.read<ProductService>().fetch10ProductsByName(searchController.text),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator()); // Hiển thị khi đang tải

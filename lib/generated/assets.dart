@@ -4,7 +4,6 @@ class Assets {
 
   static const String addressServiceAddressRepository = 'lib/services/address_service/address_repository.dart';
   static const String addressServiceAddressService = 'lib/services/address_service/address_service.dart';
-  static const String assetsData  = 'lib/assets/data .json';
   static const String assetsIconsBooksAndMedia = 'lib/assets/icons/books_and_media.svg';
   static const String assetsIconsComputerAndAccessories = 'lib/assets/icons/computer_and_accessories.svg';
   static const String assetsIconsFashionAndApparel = 'lib/assets/icons/fashion_and_apparel.svg';
@@ -53,10 +52,8 @@ class Assets {
   static const String imagesBanner1 = 'lib/assets/images/banner1.png';
   static const String imagesBanner2 = 'lib/assets/images/banner2.png';
   static const String imagesDefaultAva = 'lib/assets/images/default_ava.svg';
-  static const String imagesEllipse 10 = 'lib/assets/images/Ellipse 10.svg';
   static const String imagesImgWelcomeOnboarding = 'lib/assets/images/img_welcome_onboarding.jpg';
   static const String imagesLogo = 'lib/assets/images/logo.svg';
-  static const String libAssetsData  = 'lib/assets/data .json';
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
   static const String libModelReviews = 'lib/widgets/lib/model/reviews.dart';
@@ -89,11 +86,18 @@ class Assets {
   static const String servicesMyOrderService = 'lib/services/my_order_service.dart';
   static const String servicesOrderService = 'lib/services/order_service.dart';
   static const String servicesProductService = 'lib/services/product_service.dart';
+  static const String servicesRememberService = 'lib/services/Remember_service.dart';
   static const String servicesReviewService = 'lib/services/review_service.dart';
   static const String servicesStripeService = 'lib/services/stripe_service.dart';
   static const String servicesUserService = 'lib/services/user_service.dart';
   static const String sharedConstants = 'lib/shared/constants.dart';
   static const String sharedLoading = 'lib/shared/loading.dart';
+  static const String shopScreenAddProduct = 'lib/presentation/shop_screen/addProduct.dart';
+  static const String shopScreenProductStoreItem = 'lib/presentation/shop_screen/productStoreItem.dart';
+  static const String shopScreenShopOrderListScreen = 'lib/presentation/shop_screen/shop_order_list_screen.dart';
+  static const String shopScreenShopOrderModel = 'lib/presentation/shop_screen/shop_order_model.dart ';
+  static const String shopScreenStoreScreen = 'lib/presentation/shop_screen/store_screen.dart';
+  static const String shopServiceShopService = 'lib/services/shop_service/shop_service.dart';
   static const String signInScreenSignInScreen = 'lib/presentation/sign_in_screen/sign_in_screen.dart';
   static const String signUpScreenSignUpScreen = 'lib/presentation/sign_up_screen/sign_up_screen.dart';
   static const String splashScreenSplashScreen = 'lib/presentation/splash_screen/splash_screen.dart';

@@ -15,6 +15,8 @@ class Product {
   final String category;
   final List<String> related_product;
   final List<Review> reviews;
+  final DocumentSnapshot? documentSnapshot;
+
 
   Product({
     required this.discount_percentage,
@@ -30,6 +32,7 @@ class Product {
     required this.brand,
     required this.related_product,
     this.reviews = const [],
+    this.documentSnapshot,
   });
 
 
@@ -48,8 +51,22 @@ class Product {
         img_link: data['imUrl'] ?? '',
         brand: data['brand'] ?? '',
         related_product: List<String>.from(data['related'] ?? []),
-        discounted_price: (data['price'] * (1 - data['discount_percentage'] / 100) * 100).roundToDouble() / 100
+        discounted_price: (data['price'] * (1 - data['discount_percentage'] / 100) * 100).roundToDouble() / 100,
+        documentSnapshot: doc,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'item_amazon_id': product_id,
+      'title': product_name,
+      'description': about_product,
+      'price': actual_price,
+      'rating': rating,
+      'rating_count': rating_count,
+      'discount_percentage': discount_percentage,
+      'imUrl': img_link,
+    };
   }
 
 
@@ -101,7 +118,7 @@ class Product {
       final querySnapshot = await FirebaseFirestore.instance
           .collection('reviews')
           .where('item_amazon_id', isEqualTo: productId)  // Lọc theo product_id
-          // .orderBy('review_time', descending: true)  // Sắp xếp theo review_time mới nhất
+          .orderBy('review_time', descending: true)  // Sắp xếp theo review_time mới nhất
           .get();
 
       return querySnapshot.docs.map((doc) => Review.fromFirestore(doc)).toList();

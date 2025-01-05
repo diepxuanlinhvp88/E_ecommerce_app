@@ -27,10 +27,13 @@ class CustomTextFormField extends StatelessWidget {
   final Color? fillColor;
   final bool filled;
   final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+
 
   const CustomTextFormField({
     Key? key,
     this.alignment,
+    this.onChanged,
     this.width,
     this.boxDecoration,
     this.scrollPadding,
@@ -71,11 +74,7 @@ class CustomTextFormField extends StatelessWidget {
         width: width ?? double.maxFinite,
         decoration: boxDecoration,
         child: TextFormField(
-          scrollPadding:
-          EdgeInsets.only(bottom: MediaQuery
-              .of(context)
-              .viewInsets
-              .bottom),
+          scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           controller: controller,
           focusNode: focusNode,
           onTapOutside: (event) {
@@ -85,13 +84,14 @@ class CustomTextFormField extends StatelessWidget {
               FocusManager.instance.primaryFocus?.unfocus();
             }
           },
-          autofocus: autofocus!,
+          autofocus: autofocus,
           style: textStyle ?? CustomTextStyles.bodyMediumPrimary_1,
-          obscureText: obscureText!,
-          readOnly: readonly!,
+          obscureText: obscureText,
+          readOnly: readonly,
           onTap: () {
             onTap?.call();
           },
+          onChanged: onChanged, // Thêm dòng này
           textInputAction: textInputAction,
           keyboardType: textInputType,
           maxLines: maxLines ?? 1,

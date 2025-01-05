@@ -19,17 +19,15 @@ import 'provider/home_screen_provider.dart';
 import '../../widgets/custom_bottom_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final bool isLoggedIn = AuthService().isLoggedIn();
 
   @override
   HomeScreenState createState() => HomeScreenState();
 
   static Widget builder(BuildContext context) {
     return HomeScreen();
-    // return ChangeNotifierProvider(
-    //   create: (context) => HomeScreenProvider(),
-    //   child: const HomeScreen(),
-    // );
   }
 }
 
@@ -37,7 +35,6 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    final provider = context.read<HomeScreenProvider>();
   }
 
   @override
@@ -52,6 +49,7 @@ class HomeScreenState extends State<HomeScreen> {
           elevation: 0,
           centerTitle: true,
           toolbarHeight: 110.0,
+          automaticallyImplyLeading: false,
           flexibleSpace: ClipRRect(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(12.h),
@@ -323,7 +321,9 @@ class HomeScreenState extends State<HomeScreen> {
 
   Widget _buildRecommendedProductGrid(BuildContext context) {
     return FutureBuilder<List<Product>>(
-      future: HomeScreenModel().recommendedProductList(),
+      future: widget.isLoggedIn
+          ? HomeScreenModel().recommendedProductList()
+          : HomeScreenModel().randomProductList(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -343,7 +343,7 @@ class HomeScreenState extends State<HomeScreen> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
-            itemCount: 50,
+            itemCount: relatedProducts.length,  // Sử dụng số lượng sản phẩm thực tế
             itemBuilder: (context, index) {
               final product = relatedProducts[index];
               return GestureDetector(
@@ -364,4 +364,5 @@ class HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
 }

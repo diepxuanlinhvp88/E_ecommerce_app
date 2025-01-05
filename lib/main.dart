@@ -20,8 +20,6 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await AuthService().signOut();
-
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     MultiProvider(
