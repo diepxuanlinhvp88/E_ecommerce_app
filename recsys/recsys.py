@@ -38,7 +38,6 @@ def collection_to_dataframe(collection_name: str, selected_fields: Optional[List
     ]
 
     df = pd.DataFrame(data_list)
-    logging.info(f"Collection '{collection_name}' loaded: {len(df)} documents, columns: {list(df.columns)}")
     return df
 
 # Recommendations for New User
@@ -127,7 +126,11 @@ def upload_recommendations_to_firebase(recommendations: Dict[str, List[str]]):
     """
     db = firestore.client()
     for user_id, items in recommendations.items():
-        db.collection('users').document(user_id).set({'recommended': items}, merge=True)
+        try:
+            db.collection('users').document(user_id).set({'recommended': items}, merge=True)
+            logging.info(f"Successfully uploaded recommendations for user_id: {user_id}")
+        except Exception as e:
+            logging.error(f"Failed to upload recommendations for user_id: {user_id}. Error: {e}")
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

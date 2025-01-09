@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:untitled/data/models/user_model.dart';
-import 'package:untitled/model/user.dart';
 
 class AuthService extends ChangeNotifier {
   // Singleton pattern

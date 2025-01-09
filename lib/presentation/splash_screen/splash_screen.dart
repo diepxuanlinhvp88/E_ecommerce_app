@@ -28,8 +28,6 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () async {
       // Navigate to HomeScreen if the user is logged in, or WelcomeScreen if not
       if (isLoggedIn) {
-        // Navigator.pushNamed(context, AppRoutes.homeScreen);
-        await FirebaseAuth.instance.signOut();
         Navigator.pushNamed(context, AppRoutes.homeScreen);
       } else {
         Navigator.pushNamed(context, AppRoutes.welcomeOnboardingScreen);

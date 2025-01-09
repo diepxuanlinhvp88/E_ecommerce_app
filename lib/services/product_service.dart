@@ -26,6 +26,28 @@ class ProductService {
     }
   }
 
+  Future<Product> fetchProductById(String productId) async {
+    try {
+      // Query the specific product by ID
+      DocumentSnapshot snapshot = await _firestore.collection('amazon_products').doc(productId).get();
+
+      if (snapshot.exists) {
+        print('Product found');
+        // Return the product based on the data from Firestore
+        return Product.fromFirestore(snapshot);
+      } else {
+        print('Product not found');
+        throw Exception('Product not found');
+      }
+    } catch (e) {
+      print('Error fetching product by ID: $e');
+      // Throw the error to be handled by the caller
+      throw Exception('Error fetching product: $e');
+    }
+  }
+
+
+
   Future<List<Product>> fetchRecommendedProducts(String userId) async {
     try {
       final userDoc = await FirebaseFirestore.instance
@@ -214,44 +236,7 @@ class ProductService {
       print("Error adding product: $e");
     }
   }
-  Future<Product> getProductById(String productId) async {
-    try {
-      DocumentSnapshot doc =
-      await _firestore.collection('amazon_products').doc(productId).get();
-      if (doc.exists) {
-        print('lay dâata thanh cong');
-        return Product.fromFirestore(doc);
-      }
-      return Product(
-          discount_percentage: 1,
-          discounted_price: 1,
-          product_id: '1',
-          product_name: 'product_name',
-          category: 'category',
-          about_product: 'about_product',
-          actual_price: 1,
-          rating: 1,
-          rating_count: 1,
-          img_link: 'img_link',
-          brand: 'brand',
-          related_product: []);
-    } catch (e) {
-      print('Error fetching product: $e');
-      return Product(
-          discount_percentage: 1,
-          discounted_price: 1,
-          product_id: '1',
-          product_name: 'product_name',
-          category: 'category',
-          about_product: 'about_product',
-          actual_price: 1,
-          rating: 1,
-          rating_count: 1,
-          img_link: 'img_link',
-          brand: 'brand',
-          related_product: []);
-    }
-  }
+
   Future<void> deleteProduct(String productId) async {
     try {
       await _firestore.collection('amazon_products').doc(productId).delete();

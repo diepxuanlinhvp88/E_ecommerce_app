@@ -56,6 +56,7 @@ class Assets {
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
   static const String libModelReviews = 'lib/widgets/lib/model/reviews.dart';
+  static const String menuScreenMenuScreen = 'lib/presentation/menu_screen/menu_screen.dart';
   static const String modelAddressModel = 'lib/model/address_model.dart';
   static const String modelCountQuantity = 'lib/presentation/detail_screen/model/count_quantity.dart';
   static const String modelProduct = 'lib/model/product.dart';
@@ -68,7 +69,6 @@ class Assets {
   static const String modelsHomeScreenModel = 'lib/presentation/home_screen/models/home_screen_model.dart';
   static const String modelsSelectionPopupModel = 'lib/data/models/selection_popup_model.dart';
   static const String modelsSignUpModel = 'lib/presentation/sign_up_screen/models/sign_up_model.dart';
-  static const String modelsUserModel = 'lib/data/models/user_model.dart';
   static const String orderOrdersModel = 'lib/model/order/orders_model.dart';
   static const String ordersScreenAfterOrder = 'lib/presentation/orders_screen/after_order.dart';
   static const String ordersScreenEditInfo = 'lib/presentation/orders_screen/edit_info.dart';
@@ -88,8 +88,6 @@ class Assets {
   static const String servicesReviewService = 'lib/services/review_service.dart';
   static const String servicesStripeService = 'lib/services/stripe_service.dart';
   static const String servicesUserService = 'lib/services/user_service.dart';
-  static const String sharedConstants = 'lib/shared/constants.dart';
-  static const String sharedLoading = 'lib/shared/loading.dart';
   static const String shopScreenAddProduct = 'lib/presentation/shop_screen/addProduct.dart';
   static const String shopScreenProductStoreItem = 'lib/presentation/shop_screen/productStoreItem.dart';
   static const String shopScreenShopOrderListScreen = 'lib/presentation/shop_screen/shop_order_list_screen.dart';

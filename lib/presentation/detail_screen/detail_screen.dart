@@ -13,6 +13,7 @@ import 'package:untitled/widgets/custom_rating_bar.dart';
 import 'package:untitled/widgets/product_card.dart';
 import '../../model/reviews.dart';
 import '../../model/user.dart';
+import '../../services/my_order_service.dart';
 import '../../services/user_service.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../../widgets/custom_text_form_field.dart';
@@ -377,7 +378,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   // Customer Reviews
                   Container(
-                      padding: EdgeInsets.all(2), child: _buildReviewForm(context)),
+                    padding: EdgeInsets.all(2),
+                    child: FutureBuilder<Widget>(
+                      future: _buildReviewForm(context), // Call your async method here
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator()); // Show loading while waiting for result
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text('Error: ${snapshot.error}')); // Show error if any
+                        } else if (snapshot.hasData) {
+                          return snapshot.data!; // Return the Widget when Future is completed
+                        } else {
+                          return Center(child: Text('No data available'));
+                        }
+                      },
+                    ),
+                  ),
+
 
                   Container(
                       padding: EdgeInsets.all(2), child: Customer_review()),
@@ -609,7 +626,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildReviewForm(BuildContext context) {
+  Future<Widget> _buildReviewForm(BuildContext context) async {
     final TextEditingController reviewTitleController = TextEditingController();
     final TextEditingController reviewContentController = TextEditingController();
     double rating = 0.0;
@@ -618,6 +635,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       return Center(
         child: Text(
           'Please log in to write a review.',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+
+    if (!(await MyOrderService().hasUserPurchasedProduct(userId, widget.product.product_id))) {
+      return Center(
+        child: Text(
+          'Please buy product to write a review.',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
@@ -731,6 +757,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     } catch (e) {
       print("Error adding review: $e");
     }
+
+    try {
+      // Chuyển đổi review_time thành Unix timestamp (milliseconds since epoch)
+      int reviewTimeInMilliseconds = newReview.review_time.millisecondsSinceEpoch;
+
+      // Thêm review vào Firestore
+      FirebaseFirestore.instance.collection('reviews').add({
+        'user_name': newReview.review_name,
+        'summary': newReview.review_title,
+        'review_text': newReview.review_content,
+        'rating': newReview.rating,
+        'user_amazon_id': newReview.user_id,
+        'item_amazon_id': newReview.product_id,
+        'review_time': reviewTimeInMilliseconds,  // Lưu dưới dạng milliseconds
+      }).then((value) {
+        print("Review added successfully");
+      }).catchError((error) {
+        print("Failed to add review: $error");
+      });
+    } catch (e) {
+      print("Error adding review: $e");
+    }
+
+
   }
+
+
 
 }
